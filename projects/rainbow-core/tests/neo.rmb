@@ -1,0 +1,30 @@
+schema NeoNight {
+    theme: neo
+}
+
+meta {
+
+}
+
+default {
+    class: #FFFFFF
+    interface: {
+        color: white;
+        background-color: black;
+        text: #FFFFFF
+        background: #FFFFFF
+        border: #FFFFFF
+        underline: null
+    }
+    trait: self.class {
+
+    }
+}
+
+language JS {
+
+}
+
+language JSX: JS {
+
+}

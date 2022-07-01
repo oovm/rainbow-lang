@@ -1,0 +1,7 @@
+{
+    "a": [
+        false,
+        null,
+        true,
+    ],
+}
