@@ -1,7 +1,8 @@
 [workspace]
 members = ["projects/*"]
 default-members = [
-    "projects/rainbow_core",
+    "projects/rainbow-core",
+    "projects/rainbow-pest",
 ]
 exclude = [
     "projects/.DS_Store",

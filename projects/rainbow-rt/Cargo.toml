@@ -1,0 +1,18 @@
+[package]
+name = "rainbow-runtime"
+version = "0.5.1"
+authors = ["Aster <galaster@foxmail.com>"]
+description = "Arc Readable Configuration"
+license = "MPL-2.0"
+readme = "../../Readme.md"
+repository = "https://github.com/doki-land/arc-rs"
+exclude = ["/tests/*"]
+edition = "2018"
+
+[dependencies]
+
+
+[features]
+default = []
+serde = []
+lsp = []

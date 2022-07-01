@@ -1,24 +1,28 @@
 schema NeoNight {
-    theme: neo
+    theme: "neo"
+    variant: "night"
+    type: dark
 }
 
 meta {
-
+    black: #282c34
+    white: #abb2bf
+    red: #e06c75
+    green: #98c379
+    yellow: #e5c07b
+    blue: #61afef
 }
 
-default {
-    class: #FFFFFF
-    interface: {
-        color: white;
-        background-color: black;
-        text: #FFFFFF
-        background: #FFFFFF
-        border: #FFFFFF
-        underline: null
-    }
-    trait: self.class {
+global {
+    default: {
+        color: meta.white
+        background-color: meta.black
+    },
+    class: #e5c07b;
+    interface: {}
+    trait: class {
 
-    }
+    };
 }
 
 language JS {
@@ -26,5 +30,5 @@ language JS {
 }
 
 language JSX: JS {
-
+    class: class
 }
