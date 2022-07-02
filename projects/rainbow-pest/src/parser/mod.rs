@@ -4,7 +4,7 @@ use pest::error::ErrorVariant::CustomError;
 use pest::iterators::{Pair, Pairs};
 use pest::Parser;
 
-use crate::ast::{ASTProgram, ASTStatement, KvPair, MetaStatement, RangedObject, RangedValue, SchemaStatement};
+use crate::ast::{ASTProgram, ASTStatement, KvPair, LanguageStatement, MetaStatement, RangedObject, RangedValue, SchemaStatement};
 use crate::{RainbowParser, Rule};
 
 pub use self::config::ParserConfig;
@@ -35,6 +35,7 @@ impl ParserConfig {
                 Rule::EOI | Rule::SEPARATOR => continue,
                 Rule::schema_statement => codes.push(ASTStatement::Schema(self.parse_schema(pair)?)),
                 Rule::meta_statement => codes.push(ASTStatement::Meta(self.parse_meta(pair)?)),
+                Rule::language_statement => codes.push(ASTStatement::Language(self.parse_language(pair)?)),
                 _ => debug_cases!(pair),
             };
         }
@@ -59,6 +60,20 @@ impl ParserConfig {
         let object = self.parse_object(pairs.next().unwrap())?;
         Ok(MetaStatement { meta, object })
     }
+    fn parse_language(&self, pairs: Pair<Rule>) -> Result<LanguageStatement> {
+        // let r = self.get_position(&pairs);
+        let mut language = String::new();
+        let mut object = RangedObject::new();
+        for pair in pairs.into_inner() {
+            match pair.as_rule() {
+                Rule::SYMBOL => language = pair.as_str().to_string(),
+                Rule::object => object = self.parse_object(pair)?,
+                Rule::language_inherit => continue,
+                _ => debug_cases!(pair),
+            };
+        }
+        Ok(LanguageStatement { language, inherit: vec![], attributes: object })
+    }
 }
 
 impl ParserConfig {
@@ -71,10 +86,15 @@ impl ParserConfig {
         return Ok(object);
     }
     fn parse_object_inherit(&self, pairs: Pair<Rule>) -> Result<RangedValue> {
-        for pair in pairs.into_inner() {
-            println!("{:?}", pair)
+        let mut pairs = pairs.into_inner().rev();
+        let mut object = self.parse_object(pairs.next().unwrap())?;
+        if let Some(s) = pairs.next() {
+            match self.parse_namespace(s)? {
+                RangedValue::Namespace(s) => object.inherit = s,
+                _ => {}
+            }
         }
-        todo!()
+        Ok(RangedValue::Object(object))
     }
     fn parse_list(&self, pairs: Pair<Rule>) -> Result<RangedValue> {
         let mut out = vec![];
@@ -84,9 +104,10 @@ impl ParserConfig {
         if out.len() == 1 { Ok(out.pop().unwrap()) } else { Ok(RangedValue::Array(out)) }
     }
     fn parse_pair(&self, pairs: Pair<Rule>) -> Result<KvPair> {
+        let debug_s = pairs.as_str();
         let mut pairs = pairs.into_inner();
-        let key = pairs.next().unwrap().as_str();
-        let pair = pairs.next().unwrap();
+        let key = pairs.next().expect(debug_s).as_str();
+        let pair = pairs.next().expect(debug_s);
         let value = match pair.as_rule() {
             Rule::list => self.parse_list(pair)?,
             Rule::object_inherit => self.parse_object_inherit(pair)?,

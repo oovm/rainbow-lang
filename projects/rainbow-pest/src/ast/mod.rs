@@ -15,7 +15,7 @@ pub enum ASTStatement {
     Import(ImportStatement),
     Schema(SchemaStatement),
     Meta(MetaStatement),
-    Global(LanguageStatement),
+    Language(LanguageStatement),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -36,13 +36,13 @@ pub struct MetaStatement {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct LanguageStatement {
     pub language: String,
-    pub inherit: Option<String>,
+    pub inherit: Vec<String>,
     pub attributes: RangedObject,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct RangedObject {
-    pub inherit: Option<Namespace>,
+    pub inherit: Vec<String>,
     pub inner: HashMap<String, RangedValue>,
 }
 
@@ -51,9 +51,6 @@ pub struct KvPair {
     pub key: String,
     pub value: RangedValue,
 }
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Namespace {}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RangedValue {

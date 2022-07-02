@@ -1,9 +1,11 @@
-use std::{collections::HashMap, str::FromStr};
+use std::{
+    collections::{BTreeMap, HashMap},
+    str::FromStr,
+};
 
 use rainbow_pest::{
     ast::{ASTProgram, ASTStatement, MetaStatement, RangedObject, RangedValue, SchemaStatement},
     Error, ParserConfig, Rule,
-    Rule::Set,
 };
 
 use crate::{schema::Value, RainbowError};
@@ -14,7 +16,7 @@ type Result<T> = std::result::Result<T, RainbowError>;
 
 impl From<Error<Rule>> for RainbowError {
     fn from(e: Error<Rule>) -> Self {
-        todo!()
+        todo!("{}", e)
     }
 }
 
@@ -31,7 +33,7 @@ impl FromStr for Schema {
 impl TryFrom<ASTProgram> for Schema {
     type Error = RainbowError;
 
-    fn try_from(program: ASTProgram) -> std::result::Result<Self, Self::Error> {
+    fn try_from(program: ASTProgram) -> Result<Self> {
         let mut out = Schema::default();
         let mut ctx = SchemaContext::default();
         for i in program.statements {
@@ -46,25 +48,24 @@ impl TryFrom<ASTProgram> for Schema {
                 ASTStatement::Meta(node) => {
                     out.eval_meta(node, &mut ctx)?;
                 }
-                ASTStatement::Global(node) => {
+                ASTStatement::Language(node) => {
                     println!("{:#?}", node);
                     todo!()
                 }
             }
         }
-        todo!()
+        Ok(out)
     }
 }
 
 impl Default for SchemaContext {
     fn default() -> Self {
-        Self { first_schema: true, first_meta: true }
+        Self { first_schema: true }
     }
 }
 
 struct SchemaContext {
     first_schema: bool,
-    first_meta: bool,
 }
 
 impl Schema {
@@ -85,45 +86,24 @@ impl Schema {
         Ok(())
     }
     fn eval_meta(&mut self, ast: MetaStatement, ctx: &mut SchemaContext) -> Result<()> {
-        if ctx.first_meta {
-            ctx.first_meta = false
-        }
-        else {
-            return Err(RainbowError::duplicate_declaration("meta"));
-        }
-        println!("{:#?}", ast);
-        todo!();
+        self.custom.insert(ast.meta, Value::eval_object(ast.object, ctx)?);
         Ok(())
     }
 }
 
-impl From<RangedObject> for Value {
-    fn from(o: RangedObject) -> Self {
-        let mut out = HashMap::new();
+impl Value {
+    pub fn eval_object(o: RangedObject, ctx: &mut SchemaContext) -> Result<Self> {
+        let mut out = BTreeMap::new();
         for (k, ranged) in o.inner {
             let v = match ranged {
                 RangedValue::Null => Value::Null,
-                RangedValue::String(v) => {
-                    todo!()
-                }
-                RangedValue::Number(v) => {
-                    todo!()
-                }
-                RangedValue::Boolean(v) => {
-                    todo!()
-                }
-                RangedValue::Color(v) => {
-                    todo!()
-                }
-                RangedValue::Array(v) => {
-                    todo!()
-                }
-                RangedValue::Namespace(v) => {
-                    todo!()
-                }
-                RangedValue::Object(v) => {
-                    todo!()
-                }
+                RangedValue::String(v) => Value::String(v),
+                RangedValue::Number(v) => Value::Number(v),
+                RangedValue::Boolean(v) => Value::Boolean(v),
+                RangedValue::Color(v) => Value::Color(v),
+                RangedValue::Array(v) => todo!(),
+                RangedValue::Namespace(v) => Value::Reference(v),
+                RangedValue::Object(v) => Value::eval_object(v, ctx),
             };
             out.insert(k, v);
         }

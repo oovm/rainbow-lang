@@ -3,8 +3,9 @@ use super::*;
 impl RangedObject {
     #[inline]
     pub fn new() -> Self {
-        Self { inherit: None, inner: HashMap::new() }
+        Self { inherit: vec![], inner: HashMap::new() }
     }
+
     #[inline]
     pub fn insert(&mut self, key: String, value: RangedValue) {
         self.inner.insert(key, value);

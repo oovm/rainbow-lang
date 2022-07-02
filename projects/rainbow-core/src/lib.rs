@@ -5,3 +5,4 @@ pub use self::{
 
 mod errors;
 mod schema;
+mod vm;

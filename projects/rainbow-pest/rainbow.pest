@@ -5,6 +5,7 @@ statement = _{
     SEPARATOR
   | EmptyLine{1,}
   | schema_statement
+  | language_statement
   | meta_statement
 }
 EmptyLine  = @{WHITESPACE* ~ NEWLINE}
@@ -14,6 +15,7 @@ schema_statement =  {"schema" ~ SYMBOL ~ object}
 meta_statement =  {SYMBOL ~ object}
 language_statement =  {"language" ~ SYMBOL ~ language_inherit? ~ object}
 /*====================================================================================================================*/
+///Red
 language_inherit = {":" ~ SYMBOL}
 object_inherit = {namespace? ~ object}
 /*====================================================================================================================*/
@@ -24,6 +26,7 @@ Set    = _{"="|":"}
 /*====================================================================================================================*/
 value   = !{String|Special|Color|Number|namespace}
 Special = @{"true"|"false"|"null"}
+/// Yellow
 Color   = @{"#" ~ ASCII_HEX_DIGIT+}
 /*====================================================================================================================*/
 //!#D19A66: SignedNumber
@@ -53,9 +56,6 @@ SYMBOL    = @{XID_START ~ (XID_CONTINUE|"_"|"-")*}
 // NEWLINE = @{"\r" ~ "\n"|"\r"|"\n"}
 
 ///Gray
-COMMENT          =  {MultiLineComment|LineComment}
+COMMENT          = _{"//" ~ (!NEWLINE ~ ANY)*}
 WHITESPACE       = _{NEWLINE|SPACE_SEPARATOR|"\t"}
-LineComment      = ${"//" ~ (!NEWLINE ~ ANY)*}
-MultiLineComment = ${"/*" ~ (MultiLineComment | !"*/" ~ ANY)* ~ "*/"}
-
-SEPARATOR  = @{","|";"}
+SEPARATOR        = _{","|";"}

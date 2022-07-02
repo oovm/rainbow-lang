@@ -1,27 +1,22 @@
-use std::path::PathBuf;
+use std::ops::Range;
+
+use pest::iterators::Pair;
+
+use crate::Rule;
 
 ///
-pub struct ParserConfig {
-    ///
-    pub tab_size: usize,
-    ///
-    pub file_path: Option<PathBuf>,
-}
+pub struct ParserConfig {}
 
 impl Default for ParserConfig {
     fn default() -> Self {
-        Self { tab_size: 4, file_path: None }
+        Self {}
     }
 }
 
 impl ParserConfig {
-    // pub fn get_position(&self, s: &Pair<Rule>) -> Range {
-    //     let us = s.as_span().start_pos().line_col();
-    //     let es = s.as_span().end_pos().line_col();
-    //     Range {
-    //         // index: s.start_pos().pos() as u64,
-    //         start: Position { line: us.0 as u64 - 1, character: us.1 as u64 - 1 },
-    //         end: Position { line: es.0 as u64 - 1, character: es.1 as u64 - 1 },
-    //     }
-    // }
+    pub fn get_position(&self, s: &Pair<Rule>) -> Range<u32> {
+        let us = s.as_span().start_pos();
+        let es = s.as_span().end_pos();
+        Range { start: us.pos() as u32, end: es.pos() as u32 }
+    }
 }

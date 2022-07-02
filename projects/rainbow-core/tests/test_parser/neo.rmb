@@ -12,3 +12,26 @@ meta {
     yellow: #e5c07b
     blue: #61afef
 }
+
+default {
+    color: meta.white
+    background-color: meta.black
+}
+
+global {
+    class:
+        // trait: class {}
+    #e5c07b;
+    interface: {
+
+    }
+
+}
+
+language JS {
+
+}
+
+language JSX: JS {
+    class: class
+}
