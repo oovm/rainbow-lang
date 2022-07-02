@@ -8,65 +8,46 @@ statement = _{
 }
 EmptyLine  = @{WHITESPACE* ~ NEWLINE}
 /*====================================================================================================================*/
-import_statement =  {"import" ~ SYMBOL? ~ StringNormal}
-schema_statement =  {"schema" ~ SYMBOL ~ "as" ~ namespace}
-meta_statement =  {"schema" ~ SYMBOL ~ "as" ~ namespace}
-global_statement =  {"schema" ~ SYMBOL ~ "as" ~ namespace}
+import_statement =  {"import" ~ SYMBOL? ~ String}
+schema_statement =  {"schema" ~ SYMBOL ~ object}
+meta_statement =  {SYMBOL ~ object}
+global_statement =  {"global" ~ object}
+language_statement =  {"language" ~ SYMBOL ~ language_inherit? ~ object}
 /*====================================================================================================================*/
-attribute_statement = {Key ~ Set ~ value}
-property_statement = {Key ~ Set ~ value}
-pair_relax  = !{Key ~ Set ~ value}
-object = {
-    namespace? ~ "{" ~ "}"
-  | namespace? ~ "{" ~ (SEPARATOR? ~ pair)+ ~ SEPARATOR? ~ "}"
-}
+language_inherit = {":" ~ SYMBOL}
+object_inherit = {namespace? ~ object}
 /*====================================================================================================================*/
-pair  = !{Key ~ Set ~ value}
-Key   = _{StringNormal|SYMBOL|SignedNumber}
+object = {"{" ~ (SEPARATOR | pair)* ~ "}"}
+pair  = !{SYMBOL ~ Set ~ (object_inherit | (!(SYMBOL ~ Set) ~ value)+)}
 Set   = @{"="|":"}
 /*====================================================================================================================*/
-value = !{Special|Color|Number|String}
+value = !{String|Special|Color|Number|SYMBOL}
 Special = @{"true"|"false"|"null"}
 Color   = @{"#" ~ ASCII_HEX_DIGIT+}
 /*====================================================================================================================*/
 //!#D19A66: SignedNumber
-Number       = ${(Exponent|SignedNumber) ~ SYMBOL?}
+Number       = ${SignedNumber ~ SYMBOL?}
 SignedNumber = ${Sign? ~ (Decimal|DecimalBad|Integer)}
-Decimal      = ${Integer ~ Dot ~ ("_"? ~ ASCII_DIGIT)*}
-DecimalBad   = ${Integer ~ Dot|Dot ~ ("_"? ~ ASCII_DIGIT)*}
+Decimal      = ${Integer ~ "." ~ ("_"? ~ ASCII_DIGIT)*}
+DecimalBad   = ${Integer ~ "."|"." ~ ("_"? ~ ASCII_DIGIT)*}
 //Integer    = @{"0"|ASCII_NONZERO_DIGIT ~ ("_"? ~ ASCII_DIGIT)*}
 Integer      = @{ASCII_DIGIT ~ ("_"? ~ ASCII_DIGIT)*}
-Exponent     = ${SignedNumber ~ ("e"|"E"|"**") ~ Sign? ~ ASCII_DIGIT+}
 Sign         = @{"+"|"-"}
 /*====================================================================================================================*/
 //!#3C963C: String|InlineString|InlineString2|RestLineText
 //!#98C379: StringQuotation|StringAccent
 //!#D19A66: StringApostrophe
-String       = !{SYMBOL? ~ (StringNormal|StringEmpty)}
-StringEmpty  = @{S1{2}|S2{2}}
-StringNormal = ${
-    S1{1} ~ PUSH(S1*) ~ (NS1)+ ~ POP ~ S1{1}
-  | S2{1} ~ PUSH(S2*) ~ (NS2)+ ~ POP ~ S2{1}
-//| "‹" ~ NS3 ~ "›"
-//| "«" ~ NS4 ~ "»"
-}
-NS1 = @{(!(S1 ~ PEEK) ~ ANY)+}
-NS2 = @{
+String    = @{"\"" ~ Character* ~ "\""}
+Character = @{
     "\\u" ~ ASCII_HEX_DIGIT{4}
   | "\\u" ~ "{" ~(ASCII_HEX_DIGIT|SPACE_SEPARATOR)+ ~ "}"
   | "\\" ~ ANY
-  | (!(S2 ~ PEEK) ~ ANY)+
+  | (!("\"") ~ ANY)+
 }
-// NS3 = @{(!"»" ~ ANY)+}
-// NS4 = @{Escape ~ ANY|(!"»" ~ ANY)+}
-S1 = @{"'"}
-S2 = @{"\""}
 /*====================================================================================================================*/
 ///#61AFEF
-namespace =  {Key ~ (Dot ~ Key)*}
-SYMBOL    = @{(XID_START|ExtraID) ~ (XID_CONTINUE|ExtraID)*}
-ExtraID   = @{"_"|"-"}
-Dot       = @{"."}
+namespace =  {SYMBOL ~ ("." ~ SYMBOL)*}
+SYMBOL    = @{XID_START ~ (XID_CONTINUE|"_"|"-")*}
 /*====================================================================================================================*/
 // NEWLINE = @{"\r" ~ "\n"|"\r"|"\n"}
 
