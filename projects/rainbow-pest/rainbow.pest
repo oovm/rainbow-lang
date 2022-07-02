@@ -5,49 +5,29 @@ statement = _{
     SEPARATOR
   | EmptyLine{1,}
   | schema_statement
-//| dict_literal // For json compatibility
 }
 EmptyLine  = @{WHITESPACE* ~ NEWLINE}
 /*====================================================================================================================*/
-//!#C678DD: Import
-// include_statement = {"@include" ~ "(" ~ StringNormal ~ ("," ~ SYMBOL) ~ ")"}
+import_statement =  {"import" ~ SYMBOL? ~ StringNormal}
 schema_statement =  {"schema" ~ SYMBOL ~ "as" ~ namespace}
 meta_statement =  {"schema" ~ SYMBOL ~ "as" ~ namespace}
 global_statement =  {"schema" ~ SYMBOL ~ "as" ~ namespace}
-import_statement =  {"import" ~ SYMBOL? ~ StringNormal}
 /*====================================================================================================================*/
-attribute_statement = {Key ~ EQ ~ value}
-property_statement = {Key ~ EQ ~ value}
+attribute_statement = {Key ~ Set ~ value}
+property_statement = {Key ~ Set ~ value}
+pair_relax  = !{Key ~ Set ~ value}
 object = {
     namespace? ~ "{" ~ "}"
   | namespace? ~ "{" ~ (SEPARATOR? ~ pair)+ ~ SEPARATOR? ~ "}"
 }
-value = !{Special|Cite|Byte|Number| String}
 /*====================================================================================================================*/
-pair    = !{namespace ~ Set ~ (value|RestLineText)}
-Set          = @{"="|":"}
+pair  = !{Key ~ Set ~ value}
+Key   = _{StringNormal|SYMBOL|SignedNumber}
+Set   = @{"="|":"}
 /*====================================================================================================================*/
-list_scope   = _{list_head ~ list_pair*}
-list_head    = !{"[" ~ Dot* ~ namespace ~ "]"}
-list_pair    =  {
-    Insert ~ pair+
-  | Append ~ WHITE_SPACE* ~ (!value ~ ListString|value)
-}
-list_literal =  {
-    SYMBOL? ~ "[" ~ "]"
-  | SYMBOL? ~ "[" ~ (SEPARATOR? ~ (value|RestLineText))+ ~ SEPARATOR? ~ "]"
-}
-RestLineText = @{(!(NEWLINE|"]"|"}") ~ ANY)+}
-ListString   = @{(!(">"|"^"|"["|"{") ~ ANY)+}
-Insert       = @{"^"}
-Append       = @{">"}
-/*====================================================================================================================*/
-///#D19A66
+value = !{Special|Color|Number|String}
 Special = @{"true"|"false"|"null"}
-Byte    = @{"0" ~ ASCII_ALPHA ~ (ASCII_ALPHANUMERIC|"_"|"-")}
-/*====================================================================================================================*/
-///#56B6C2
-Cite = ${"$" ~ namespace}
+Color   = @{"#" ~ ASCII_HEX_DIGIT+}
 /*====================================================================================================================*/
 //!#D19A66: SignedNumber
 Number       = ${(Exponent|SignedNumber) ~ SYMBOL?}
@@ -84,11 +64,9 @@ S2 = @{"\""}
 /*====================================================================================================================*/
 ///#61AFEF
 namespace =  {Key ~ (Dot ~ Key)*}
-Key       = _{StringNormal|SYMBOL|SignedNumber}
 SYMBOL    = @{(XID_START|ExtraID) ~ (XID_CONTINUE|ExtraID)*}
 ExtraID   = @{"_"|"-"}
 Dot       = @{"."}
-EQ        = @{"="|":"}
 /*====================================================================================================================*/
 // NEWLINE = @{"\r" ~ "\n"|"\r"|"\n"}
 
