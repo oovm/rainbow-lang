@@ -4,5 +4,6 @@ pub use self::{
 };
 
 mod errors;
+mod renderer;
 mod schema;
 mod vm;

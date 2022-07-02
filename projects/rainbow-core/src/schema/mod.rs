@@ -6,7 +6,6 @@ use std::{
 use rainbow_pest::HexColor;
 
 mod methods;
-mod parser;
 mod value;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -30,6 +29,5 @@ pub enum OwnedValue {
     Number(String),
     Boolean(bool),
     Color(HexColor),
-    Reference(Vec<String>),
     Object(BTreeMap<String, Value>),
 }

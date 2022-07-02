@@ -1,7 +1,4 @@
-use std::{
-    collections::{BTreeMap, HashMap},
-    str::FromStr,
-};
+use std::{collections::BTreeMap, str::FromStr};
 
 use rainbow_pest::{
     ast::{ASTProgram, ASTStatement, MetaStatement, RangedObject, RangedValue, SchemaStatement},
@@ -10,7 +7,7 @@ use rainbow_pest::{
 
 use crate::{schema::Value, RainbowError};
 
-use super::Schema;
+use crate::Schema;
 
 type Result<T> = std::result::Result<T, RainbowError>;
 
@@ -96,13 +93,17 @@ impl Value {
         let mut out = BTreeMap::new();
         for (k, ranged) in o.inner {
             let v = match ranged {
-                RangedValue::Null => Value::Null,
-                RangedValue::String(v) => Value::String(v),
-                RangedValue::Number(v) => Value::Number(v),
-                RangedValue::Boolean(v) => Value::Boolean(v),
-                RangedValue::Color(v) => Value::Color(v),
-                RangedValue::Array(v) => todo!(),
-                RangedValue::Namespace(v) => Value::Reference(v),
+                RangedValue::Null => Value::null(),
+                RangedValue::String(v) => Value::string(v),
+                RangedValue::Number(v) => Value::number(v),
+                RangedValue::Boolean(v) => Value::boolean(v),
+                RangedValue::Color(v) => Value::color(v),
+                RangedValue::Array(v) => {
+                    for order in v {
+                        todo!("{:?}", order)
+                    }
+                }
+                RangedValue::Namespace(v) => Value::reference(v),
                 RangedValue::Object(v) => Value::eval_object(v, ctx),
             };
             out.insert(k, v);

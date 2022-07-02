@@ -9,7 +9,6 @@ pub enum Rule {
     import_statement,
     schema_statement,
     meta_statement,
-    global_statement,
     language_statement,
     language_inherit,
     object_inherit,
@@ -32,8 +31,6 @@ pub enum Rule {
     SYMBOL,
     COMMENT,
     WHITESPACE,
-    LineComment,
-    MultiLineComment,
     SEPARATOR,
 }
 #[allow(clippy::all)]
@@ -58,7 +55,7 @@ impl ::pest::Parser<Rule> for RainbowParser {
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
                 pub fn statement(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    self::SEPARATOR(state).or_else(|state| state.sequence(|state| self::EmptyLine(state).and_then(|state| super::hidden::skip(state)).and_then(|state| state.sequence(|state| state.optional(|state| self::EmptyLine(state).and_then(|state| state.repeat(|state| state.sequence(|state| super::hidden::skip(state).and_then(|state| self::EmptyLine(state)))))))))).or_else(|state| self::schema_statement(state)).or_else(|state| self::meta_statement(state))
+                    self::SEPARATOR(state).or_else(|state| state.sequence(|state| self::EmptyLine(state).and_then(|state| super::hidden::skip(state)).and_then(|state| state.sequence(|state| state.optional(|state| self::EmptyLine(state).and_then(|state| state.repeat(|state| state.sequence(|state| super::hidden::skip(state).and_then(|state| self::EmptyLine(state)))))))))).or_else(|state| self::schema_statement(state)).or_else(|state| self::language_statement(state)).or_else(|state| self::meta_statement(state))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
@@ -79,11 +76,6 @@ impl ::pest::Parser<Rule> for RainbowParser {
                 #[allow(non_snake_case, unused_variables)]
                 pub fn meta_statement(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
                     state.rule(Rule::meta_statement, |state| state.sequence(|state| self::SYMBOL(state).and_then(|state| super::hidden::skip(state)).and_then(|state| self::object(state))))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
-                pub fn global_statement(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.rule(Rule::global_statement, |state| state.sequence(|state| state.match_string("global").and_then(|state| super::hidden::skip(state)).and_then(|state| self::object(state))))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
@@ -188,7 +180,7 @@ impl ::pest::Parser<Rule> for RainbowParser {
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
                 pub fn COMMENT(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.rule(Rule::COMMENT, |state| state.atomic(::pest::Atomicity::Atomic, |state| self::MultiLineComment(state).or_else(|state| self::LineComment(state))))
+                    state.atomic(::pest::Atomicity::Atomic, |state| state.sequence(|state| state.match_string("//").and_then(|state| state.repeat(|state| state.sequence(|state| state.lookahead(false, |state| self::NEWLINE(state)).and_then(|state| self::ANY(state)))))))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
@@ -197,18 +189,8 @@ impl ::pest::Parser<Rule> for RainbowParser {
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
-                pub fn LineComment(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.atomic(::pest::Atomicity::CompoundAtomic, |state| state.rule(Rule::LineComment, |state| state.sequence(|state| state.match_string("//").and_then(|state| state.repeat(|state| state.sequence(|state| state.lookahead(false, |state| self::NEWLINE(state)).and_then(|state| self::ANY(state))))))))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
-                pub fn MultiLineComment(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.atomic(::pest::Atomicity::CompoundAtomic, |state| state.rule(Rule::MultiLineComment, |state| state.sequence(|state| state.match_string("/*").and_then(|state| state.repeat(|state| self::MultiLineComment(state).or_else(|state| state.sequence(|state| state.lookahead(false, |state| state.match_string("*/")).and_then(|state| self::ANY(state)))))).and_then(|state| state.match_string("*/")))))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
                 pub fn SEPARATOR(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.rule(Rule::SEPARATOR, |state| state.atomic(::pest::Atomicity::Atomic, |state| state.match_string(",").or_else(|state| state.match_string(";"))))
+                    state.match_string(",").or_else(|state| state.match_string(";"))
                 }
                 #[inline]
                 #[allow(dead_code, non_snake_case, unused_variables)]
@@ -265,7 +247,6 @@ impl ::pest::Parser<Rule> for RainbowParser {
             Rule::import_statement => rules::import_statement(state),
             Rule::schema_statement => rules::schema_statement(state),
             Rule::meta_statement => rules::meta_statement(state),
-            Rule::global_statement => rules::global_statement(state),
             Rule::language_statement => rules::language_statement(state),
             Rule::language_inherit => rules::language_inherit(state),
             Rule::object_inherit => rules::object_inherit(state),
@@ -288,8 +269,6 @@ impl ::pest::Parser<Rule> for RainbowParser {
             Rule::SYMBOL => rules::SYMBOL(state),
             Rule::COMMENT => rules::COMMENT(state),
             Rule::WHITESPACE => rules::WHITESPACE(state),
-            Rule::LineComment => rules::LineComment(state),
-            Rule::MultiLineComment => rules::MultiLineComment(state),
             Rule::SEPARATOR => rules::SEPARATOR(state),
             Rule::EOI => rules::EOI(state),
         })
