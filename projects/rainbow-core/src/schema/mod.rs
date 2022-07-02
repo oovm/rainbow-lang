@@ -14,6 +14,7 @@ pub struct Schema {
     pub theme: String,
     pub variant: String,
     pub custom: BTreeMap<String, Value>,
+    pub language: BTreeMap<String, Value>,
 }
 
 #[derive(Clone, Eq, PartialEq)]

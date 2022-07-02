@@ -5,9 +5,7 @@ use rainbow_pest::{
     Error, ParserConfig, Rule,
 };
 
-use crate::{schema::Value, RainbowError};
-
-use crate::Schema;
+use crate::{schema::Value, RainbowError, Schema};
 
 type Result<T> = std::result::Result<T, RainbowError>;
 
@@ -99,9 +97,7 @@ impl Value {
                 RangedValue::Boolean(v) => Value::boolean(v),
                 RangedValue::Color(v) => Value::color(v),
                 RangedValue::Array(v) => {
-                    for order in v {
-                        todo!("{:?}", order)
-                    }
+                    todo!()
                 }
                 RangedValue::Namespace(v) => Value::reference(v),
                 RangedValue::Object(v) => Value::eval_object(v, ctx),

@@ -1,6 +1,0 @@
-[
-    "\//||\/||
-    // ||  ||__
-    ",
-    "Mark McGwire's year was crippled by a knee injury.",
-]

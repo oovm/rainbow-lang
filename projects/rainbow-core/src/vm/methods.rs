@@ -9,14 +9,11 @@ impl Default for RainbowVM {
 
 impl RainbowVM {
     pub fn resolve(&self, path: &[String]) -> Value {
+        self.resolve_optional(path).unwrap_or_else(|| Value::null())
+    }
+    pub(crate) fn resolve_optional(&self, path: &[String]) -> Option<Value> {
         let mut path = path.iter().rev();
-        match path.next() {
-            None => {
-                return Value::Null;
-            }
-            Some(s) => {}
-        }
-
-        let pointer = &mut self.schemas;
+        let schema = self.schemas.get(path.next()?)?;
+        todo!()
     }
 }
