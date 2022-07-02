@@ -8,7 +8,7 @@ statement = _{
 }
 EmptyLine  = @{WHITESPACE* ~ NEWLINE}
 /*====================================================================================================================*/
-import_statement =  {"import" ~ SYMBOL? ~ String}
+import_statement =  {"import" ~ String}
 schema_statement =  {"schema" ~ SYMBOL ~ object}
 meta_statement =  {SYMBOL ~ object}
 global_statement =  {"global" ~ object}
@@ -17,9 +17,10 @@ language_statement =  {"language" ~ SYMBOL ~ language_inherit? ~ object}
 language_inherit = {":" ~ SYMBOL}
 object_inherit = {namespace? ~ object}
 /*====================================================================================================================*/
-object = {"{" ~ (SEPARATOR | pair)* ~ "}"}
-pair  = !{SYMBOL ~ Set ~ (object_inherit | (!(SYMBOL ~ Set) ~ value)+)}
-Set   = @{"="|":"}
+object =  {"{" ~ (SEPARATOR | pair)* ~ "}"}
+pair   =  {SYMBOL ~ Set ~ (object_inherit | list)}
+list   =  {(!(SYMBOL ~ Set) ~ value)+}
+Set    = _{"="|":"}
 /*====================================================================================================================*/
 value = !{String|Special|Color|Number|SYMBOL}
 Special = @{"true"|"false"|"null"}

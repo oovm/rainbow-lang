@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+mod object;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ASTProgram {
@@ -32,13 +33,17 @@ pub struct LanguageStatement {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Object {
     inherit: Option<Namespace>,
-    inner: HashMap<String, RangedValue>
+    inner: HashMap<String, RangedValue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Namespace {
-
+pub struct KvPair {
+    pub key: String,
+    pub value: RangedValue,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Namespace {}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RangedValue {
@@ -46,5 +51,6 @@ pub enum RangedValue {
     String(String),
     Number(String),
     Boolean(String),
+    Array(Vec<RangedValue>),
     Object(Object),
 }

@@ -3,33 +3,3 @@ schema OneDarkNight {
     variant: "Night"
     type: dark
 }
-
-meta {
-    black: #282c34
-    white: #abb2bf
-    red: #e06c75
-    green: #98c379
-    yellow: #e5c07b
-    blue: #61afef
-}
-
-default {
-    color: meta.white
-    background-color: meta.black
-}
-
-global {
-    class: #e5c07b;
-    interface: {}
-    trait: class {
-
-    };
-}
-
-language JS {
-
-}
-
-language JSX: JS {
-    class: class
-}
