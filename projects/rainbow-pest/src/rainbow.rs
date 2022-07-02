@@ -58,7 +58,7 @@ impl ::pest::Parser<Rule> for RainbowParser {
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
                 pub fn statement(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    self::SEPARATOR(state).or_else(|state| state.sequence(|state| self::EmptyLine(state).and_then(|state| super::hidden::skip(state)).and_then(|state| state.sequence(|state| state.optional(|state| self::EmptyLine(state).and_then(|state| state.repeat(|state| state.sequence(|state| super::hidden::skip(state).and_then(|state| self::EmptyLine(state)))))))))).or_else(|state| self::schema_statement(state))
+                    self::SEPARATOR(state).or_else(|state| state.sequence(|state| self::EmptyLine(state).and_then(|state| super::hidden::skip(state)).and_then(|state| state.sequence(|state| state.optional(|state| self::EmptyLine(state).and_then(|state| state.repeat(|state| state.sequence(|state| super::hidden::skip(state).and_then(|state| self::EmptyLine(state)))))))))).or_else(|state| self::schema_statement(state)).or_else(|state| self::meta_statement(state))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
@@ -123,7 +123,7 @@ impl ::pest::Parser<Rule> for RainbowParser {
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
                 pub fn value(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.atomic(::pest::Atomicity::NonAtomic, |state| state.rule(Rule::value, |state| self::String(state).or_else(|state| self::Special(state)).or_else(|state| self::Color(state)).or_else(|state| self::Number(state)).or_else(|state| self::SYMBOL(state))))
+                    state.atomic(::pest::Atomicity::NonAtomic, |state| state.rule(Rule::value, |state| self::String(state).or_else(|state| self::Special(state)).or_else(|state| self::Color(state)).or_else(|state| self::Number(state)).or_else(|state| self::namespace(state))))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
@@ -168,7 +168,7 @@ impl ::pest::Parser<Rule> for RainbowParser {
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
                 pub fn String(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.rule(Rule::String, |state| state.atomic(::pest::Atomicity::Atomic, |state| state.sequence(|state| state.match_string("\"").and_then(|state| state.repeat(|state| self::Character(state))).and_then(|state| state.match_string("\"")))))
+                    state.atomic(::pest::Atomicity::CompoundAtomic, |state| state.rule(Rule::String, |state| state.sequence(|state| state.match_string("\"").and_then(|state| state.repeat(|state| self::Character(state))).and_then(|state| state.match_string("\"")))))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]

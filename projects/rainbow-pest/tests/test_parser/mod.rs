@@ -1,7 +1,7 @@
-use arc_pest::ParserConfig;
+use rainbow_pest::{ParserConfig, Schema};
+use std::str::FromStr;
 
 #[test]
 fn parse() {
-    let parser = ParserConfig::default();
-    println!("{:#?}",parser.parse(include_str!("neo.rmb")).unwrap() );
+    Schema::from_str(include_str!("neo.rmb")).unwrap();
 }

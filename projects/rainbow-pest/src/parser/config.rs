@@ -1,7 +1,4 @@
-use super::*;
 use std::path::PathBuf;
-use pest::iterators::Pair;
-use crate::Rule;
 
 ///
 pub struct ParserConfig {

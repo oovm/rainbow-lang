@@ -5,13 +5,13 @@ statement = _{
     SEPARATOR
   | EmptyLine{1,}
   | schema_statement
+  | meta_statement
 }
 EmptyLine  = @{WHITESPACE* ~ NEWLINE}
 /*====================================================================================================================*/
 import_statement =  {"import" ~ String}
 schema_statement =  {"schema" ~ SYMBOL ~ object}
 meta_statement =  {SYMBOL ~ object}
-global_statement =  {"global" ~ object}
 language_statement =  {"language" ~ SYMBOL ~ language_inherit? ~ object}
 /*====================================================================================================================*/
 language_inherit = {":" ~ SYMBOL}

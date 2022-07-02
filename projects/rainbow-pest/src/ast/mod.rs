@@ -1,3 +1,4 @@
+use hex_color::HexColor;
 use std::collections::HashMap;
 
 mod object;
@@ -25,7 +26,10 @@ pub struct SchemaStatement {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct MetaStatement {}
+pub struct MetaStatement {
+    pub meta: String,
+    pub object: Object,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct LanguageStatement {
@@ -54,7 +58,8 @@ pub enum RangedValue {
     Null,
     String(String),
     Number(String),
-    Boolean(String),
+    Boolean(bool),
+    Color(HexColor),
     Array(Vec<RangedValue>),
     Namespace(Vec<String>),
     Object(Object),

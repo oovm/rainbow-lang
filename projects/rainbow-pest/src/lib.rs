@@ -2,13 +2,15 @@ pub use pest::{
     self,
     error::Error,
     iterators::{Pair, Pairs},
-    Parser,
-    prec_climber::{Assoc, Operator, PrecClimber}, Span,
+    prec_climber::{Assoc, Operator, PrecClimber},
+    Parser, Span,
 };
 
 pub use rainbow::{RainbowParser, Rule};
 
-mod rainbow;
-mod parser;
 pub mod ast;
+mod parser;
+mod rainbow;
+mod schema;
 pub use parser::ParserConfig;
+pub use schema::Schema;

@@ -1,8 +1,10 @@
+use hex_color::HexColor;
 use pest::error::Error;
+use pest::error::ErrorVariant::CustomError;
 use pest::iterators::{Pair, Pairs};
 use pest::Parser;
 
-use crate::ast::{ASTProgram, ASTStatement, KvPair, Object, RangedValue, SchemaStatement};
+use crate::ast::{ASTProgram, ASTStatement, KvPair, MetaStatement, Object, RangedValue, SchemaStatement};
 use crate::{RainbowParser, Rule};
 
 pub use self::config::ParserConfig;
@@ -32,6 +34,7 @@ impl ParserConfig {
             match pair.as_rule() {
                 Rule::EOI | Rule::SEPARATOR => continue,
                 Rule::schema_statement => codes.push(ASTStatement::Schema(self.parse_schema(pair)?)),
+                Rule::meta_statement => codes.push(ASTStatement::Meta(self.parse_meta(pair)?)),
                 _ => debug_cases!(pair),
             };
         }
@@ -49,6 +52,12 @@ impl ParserConfig {
             };
         }
         Ok(SchemaStatement { schema: symbol, object })
+    }
+    fn parse_meta(&self, pairs: Pair<Rule>) -> Result<MetaStatement> {
+        let mut pairs = pairs.into_inner();
+        let meta = pairs.next().unwrap().as_str().to_string();
+        let object = self.parse_object(pairs.next().unwrap())?;
+        Ok(MetaStatement { meta, object })
     }
 }
 
@@ -97,6 +106,7 @@ impl ParserConfig {
         let value = match pair.as_rule() {
             Rule::String => self.parse_string(pair)?,
             Rule::namespace => self.parse_namespace(pair)?,
+            Rule::Color => self.parse_color(pair)?,
             _ => debug_cases!(pair),
         };
         Ok(value)
@@ -112,5 +122,11 @@ impl ParserConfig {
             }
         }
         Ok(RangedValue::String(out))
+    }
+    fn parse_color(&self, pairs: Pair<Rule>) -> Result<RangedValue> {
+        match pairs.as_str().parse::<HexColor>() {
+            Ok(o) => Ok(RangedValue::Color(o)),
+            Err(e) => Err(Error::new_from_span(CustomError { message: e.to_string() }, pairs.as_span())),
+        }
     }
 }
