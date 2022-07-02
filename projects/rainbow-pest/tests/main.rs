@@ -4,6 +4,7 @@ extern crate pest_generator;
 extern crate proc_macro;
 use pest_generator::derive_parser;
 use std::{fs::File, io::prelude::*, path::Path};
+mod test_parser;
 
 #[test]
 fn ready() {

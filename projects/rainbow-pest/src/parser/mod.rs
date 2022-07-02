@@ -1,10 +1,14 @@
-mod config;
-
 use pest::error::Error;
 use pest::iterators::Pairs;
 use pest::Parser;
+
 use crate::{RainbowParser, Rule};
+use crate::ast::ASTProgram;
+
 pub use self::config::ParserConfig;
+
+mod config;
+
 macro_rules! debug_cases {
     ($i:ident) => {{
         println!("Rule::{:?}=>continue,", $i.as_rule());
@@ -16,13 +20,6 @@ macro_rules! debug_cases {
 
 type Result<T> = std::result::Result<T, Error<Rule>>;
 
-pub struct ASTProgram {
-    statements: Vec<ASTStatement>
-}
-
-pub struct ASTStatement {
-
-}
 
 impl ParserConfig {
     ///
@@ -31,25 +28,20 @@ impl ParserConfig {
         self.parse_program(parsed)
     }
     fn parse_program(&self, pairs: Pairs<Rule>) -> Result<ASTProgram> {
-        let mut codes = vec![];
+        // let mut codes = vec![];
         let mut additional = None;
         for pair in pairs {
             match pair.as_rule() {
-                Rule::EOI | Rule::SEPARATOR=> continue,
-                Rule::statement => {
-                    codes.push(self.parse_extend(pair));
-                }
-                Rule::data => return self.parse_data(pair),
-                Rule::dict_head => codes.push(self.parse_dict_head(pair)),
-                Rule::dict_pair => codes.push(self.parse_dict_pair(pair)),
-                Rule::list_head => codes.push(self.parse_list_head(pair)),
-                Rule::list_pair => codes.push(self.parse_list_items(pair)),
+                Rule::EOI | Rule::SEPARATOR => continue,
+                // Rule::statement => {
+                //     codes.push(self.parse_extend(pair));
+                // }
                 Rule::COMMENT => additional = Some(pair.as_str().to_string()),
-                Rule::extend_statement => codes.push(self.parse_extend(pair)),
                 _ => debug_cases!(pair),
             };
         }
-        AST { kind: ASTKind::program(codes), range: Default::default(), additional }
+        todo!()
+        // AST { kind: ASTKind::program(codes), range: Default::default(), additional }
     }
     // fn parse_extend(&self, pairs: Pair<Rule>) -> AST {
     //     let r = self.get_position(&pairs);

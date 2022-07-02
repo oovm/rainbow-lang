@@ -10,4 +10,5 @@ pub use rainbow::{RainbowParser, Rule};
 
 mod rainbow;
 mod parser;
-mod ast;
+pub mod ast;
+pub use parser::ParserConfig;
