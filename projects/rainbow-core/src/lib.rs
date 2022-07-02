@@ -1,4 +1,7 @@
-mod errors;
-mod ast;
+pub use self::{
+    errors::{ErrorKind, RainbowError},
+    schema::Schema,
+};
 
-pub use errors::{Error, Result};
+mod errors;
+mod schema;

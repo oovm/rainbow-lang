@@ -4,7 +4,7 @@ use pest::error::ErrorVariant::CustomError;
 use pest::iterators::{Pair, Pairs};
 use pest::Parser;
 
-use crate::ast::{ASTProgram, ASTStatement, KvPair, MetaStatement, Object, RangedValue, SchemaStatement};
+use crate::ast::{ASTProgram, ASTStatement, KvPair, MetaStatement, RangedObject, RangedValue, SchemaStatement};
 use crate::{RainbowParser, Rule};
 
 pub use self::config::ParserConfig;
@@ -43,7 +43,7 @@ impl ParserConfig {
     fn parse_schema(&self, pairs: Pair<Rule>) -> Result<SchemaStatement> {
         // let r = self.get_position(&pairs);
         let mut symbol = String::new();
-        let mut object = Object::new();
+        let mut object = RangedObject::new();
         for pair in pairs.into_inner() {
             match pair.as_rule() {
                 Rule::SYMBOL => symbol = pair.as_str().to_string(),
@@ -62,8 +62,8 @@ impl ParserConfig {
 }
 
 impl ParserConfig {
-    fn parse_object(&self, pairs: Pair<Rule>) -> Result<Object> {
-        let mut object = Object::new();
+    fn parse_object(&self, pairs: Pair<Rule>) -> Result<RangedObject> {
+        let mut object = RangedObject::new();
         for pair in pairs.into_inner() {
             let pair = self.parse_pair(pair)?;
             object.insert_pair(pair)
@@ -81,7 +81,7 @@ impl ParserConfig {
         for pair in pairs.into_inner() {
             out.push(self.parse_value(pair)?)
         }
-        Ok(RangedValue::Array(out))
+        if out.len() == 1 { Ok(out.pop().unwrap()) } else { Ok(RangedValue::Array(out)) }
     }
     fn parse_pair(&self, pairs: Pair<Rule>) -> Result<KvPair> {
         let mut pairs = pairs.into_inner();

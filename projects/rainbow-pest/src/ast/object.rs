@@ -1,6 +1,6 @@
 use super::*;
 
-impl Object {
+impl RangedObject {
     #[inline]
     pub fn new() -> Self {
         Self { inherit: None, inner: HashMap::new() }
@@ -12,6 +12,13 @@ impl Object {
     #[inline]
     pub fn insert_pair(&mut self, pair: KvPair) {
         self.inner.insert(pair.key, pair.value);
+    }
+    #[inline]
+    pub fn get_string(&self, key: &str) -> Option<String> {
+        match self.inner.get(key).cloned() {
+            Some(RangedValue::String(s)) => Some(s),
+            _ => None,
+        }
     }
 }
 

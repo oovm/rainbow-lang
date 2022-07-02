@@ -1,7 +1,9 @@
-use hex_color::HexColor;
 use std::collections::HashMap;
 
+use hex_color::HexColor;
+
 mod object;
+mod value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ASTProgram {
@@ -22,26 +24,26 @@ pub struct ImportStatement {}
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SchemaStatement {
     pub schema: String,
-    pub object: Object,
+    pub object: RangedObject,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct MetaStatement {
     pub meta: String,
-    pub object: Object,
+    pub object: RangedObject,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct LanguageStatement {
     pub language: String,
     pub inherit: Option<String>,
-    pub attributes: Object,
+    pub attributes: RangedObject,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Object {
-    inherit: Option<Namespace>,
-    inner: HashMap<String, RangedValue>,
+pub struct RangedObject {
+    pub inherit: Option<Namespace>,
+    pub inner: HashMap<String, RangedValue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -62,5 +64,5 @@ pub enum RangedValue {
     Color(HexColor),
     Array(Vec<RangedValue>),
     Namespace(Vec<String>),
-    Object(Object),
+    Object(RangedObject),
 }

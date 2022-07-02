@@ -11,6 +11,5 @@ pub use rainbow::{RainbowParser, Rule};
 pub mod ast;
 mod parser;
 mod rainbow;
-mod schema;
+pub use hex_color::HexColor;
 pub use parser::ParserConfig;
-pub use schema::Schema;

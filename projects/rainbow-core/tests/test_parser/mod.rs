@@ -1,4 +1,4 @@
-use rainbow_pest::{ParserConfig, Schema};
+use rainbow_core::Schema;
 use std::str::FromStr;
 
 #[test]
