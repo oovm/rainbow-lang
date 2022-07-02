@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+
 mod object;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -18,7 +19,10 @@ pub enum ASTStatement {
 pub struct ImportStatement {}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct SchemaStatement {}
+pub struct SchemaStatement {
+    pub schema: String,
+    pub object: Object,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct MetaStatement {}
@@ -52,5 +56,6 @@ pub enum RangedValue {
     Number(String),
     Boolean(String),
     Array(Vec<RangedValue>),
+    Namespace(Vec<String>),
     Object(Object),
 }

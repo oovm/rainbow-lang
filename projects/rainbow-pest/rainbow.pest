@@ -22,7 +22,7 @@ pair   =  {SYMBOL ~ Set ~ (object_inherit | list)}
 list   =  {(!(SYMBOL ~ Set) ~ value)+}
 Set    = _{"="|":"}
 /*====================================================================================================================*/
-value = !{String|Special|Color|Number|SYMBOL}
+value   = !{String|Special|Color|Number|namespace}
 Special = @{"true"|"false"|"null"}
 Color   = @{"#" ~ ASCII_HEX_DIGIT+}
 /*====================================================================================================================*/
@@ -38,7 +38,7 @@ Sign         = @{"+"|"-"}
 //!#3C963C: String|InlineString|InlineString2|RestLineText
 //!#98C379: StringQuotation|StringAccent
 //!#D19A66: StringApostrophe
-String    = @{"\"" ~ Character* ~ "\""}
+String    = ${"\"" ~ Character* ~ "\""}
 Character = @{
     "\\u" ~ ASCII_HEX_DIGIT{4}
   | "\\u" ~ "{" ~(ASCII_HEX_DIGIT|SPACE_SEPARATOR)+ ~ "}"

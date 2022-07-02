@@ -3,3 +3,12 @@ schema OneDarkNight {
     variant: "Night"
     type: dark
 }
+
+meta {
+    black: #282c34
+    white: #abb2bf
+    red: #e06c75
+    green: #98c379
+    yellow: #e5c07b
+    blue: #61afef
+}
