@@ -11,6 +11,7 @@ edition = "2018"
 
 [dependencies]
 html_parser = "0.6.3"
+rainbow-core = { version = "0.1.0", path = "../rainbow-core" }
 
 [features]
 default = []

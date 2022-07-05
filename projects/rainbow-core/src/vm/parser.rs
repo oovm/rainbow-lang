@@ -5,9 +5,7 @@ use rainbow_pest::{
     Error, ParserConfig, Rule,
 };
 
-use crate::{schema::Value, RainbowError, Schema};
-
-type Result<T> = std::result::Result<T, RainbowError>;
+use crate::{schema::Value, RainbowError, Result, Schema};
 
 impl From<Error<Rule>> for RainbowError {
     fn from(e: Error<Rule>) -> Self {
@@ -87,7 +85,7 @@ impl Schema {
 }
 
 impl Value {
-    pub fn eval_object(o: RangedObject, ctx: &mut SchemaContext) -> Result<Self> {
+    fn eval_object(o: RangedObject, ctx: &mut SchemaContext) -> Result<Self> {
         let mut out = BTreeMap::new();
         for (k, ranged) in o.inner {
             let v = match ranged {
@@ -100,10 +98,10 @@ impl Value {
                     todo!()
                 }
                 RangedValue::Namespace(v) => Value::reference(v),
-                RangedValue::Object(v) => Value::eval_object(v, ctx),
+                RangedValue::Object(v) => todo!(),
             };
             out.insert(k, v);
         }
-        return Value::Object(out);
+        return todo!();
     }
 }

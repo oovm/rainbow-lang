@@ -1,5 +1,5 @@
 pub use self::{
-    errors::{ErrorKind, RainbowError},
+    errors::{ErrorKind, RainbowError, Result},
     renderer::{Element, RenderNode},
     schema::Schema,
 };
