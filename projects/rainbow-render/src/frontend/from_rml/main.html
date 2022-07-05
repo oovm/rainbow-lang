@@ -1,0 +1,138 @@
+<div>
+    <code class="rainbow">
+        <span>//? [Valkyrie]</span>
+        <span>crate module_name;</span>
+        <span></span>
+        <span>using std.traits.</span>
+        <span class='SYM_TRAIT'>PartialEq</span>
+        <span>;</span>
+        <span>using</span>
+        <span class='KEYWORD'>depot</span>
+        <span>.{</span>
+        <span class='SYM_CLASS'>ExternalClass</span>
+        <span class='KEYWORD'>as</span>
+        <span class='SYM_CLASS'>Ec</span>
+        <span>, </span>
+        <span class='SYM_TRAIT'>ExternalTrait</span>
+        <span class='KEYWORD'>as</span>
+        <span class='SYM_TRAIT'>Et</span>
+        <span>};</span>
+        <span></span>
+        <span>trait</span>
+        <span class='SYM_TRAIT'>TraitName</span>
+        <span>{</span>
+        <span>    def</span>
+        <span class='SYM_FUNCTION_SELF'>trait_method</span>
+        <span>(</span>
+        <span class='SYM_ARG_SELF'>self</span>
+        <span>) -> Self;</span>
+        <span>    def</span>
+        <span class='SYM_FUNCTION_SELF'>trait_method_mut</span>
+        <span>(</span>
+        <span class='KEYWORD'>mut</span>
+        <span class='SYM_ARG_SELF_MUT'>self</span>
+        <span>) -> Self;</span>
+        <span>    def</span>
+        <span class='SYM_FUNCTION_FREE'>trait_static</span>
+        <span>(</span>
+        <span class='SYM_ARG'>arg</span>
+        <span>= 0) -> Self;</span>
+        <span>    def</span>
+        <span class='SYM_FUNCTION_FREE'>trait_static_mut</span>
+        <span>(</span>
+        <span class='KEYWORD'>mut</span>
+        <span class='SYM_ARG_MUT'>arg</span>
+        <span>) -> Self;</span>
+        <span>}</span>
+        <span></span>
+        <span>class</span>
+        <span class='SYM_CLASS'>ClassName</span>
+        <span>: </span>
+        <span class='SYM_TRAIT'>PartialEq</span>
+        <span>{</span>
+        <span>    </span>
+        <span class='SYM_FIELD'>field_string</span>
+        <span>: </span>
+        <span class='SYM_CLASS'>String</span>
+        <span>= </span>
+        <span class='STRING'>""</span>
+        <span class='SYM_FIELD'>field_bool</span>
+        <span>: </span>
+        <span class='SYM_CLASS'>Boolean</span>
+        <span>= </span>
+        <span class='KEYWORD'>true</span>
+        <span class='SYM_FIELD'>field_int</span>
+        <span>: </span>
+        <span class='SYM_CLASS'>Integer</span>
+        <span>= 0</span>
+        <span class='SYM_FIELD'>field_f32</span>
+        <span>: </span>
+        <span class='SYM_CLASS'>Decimal</span>
+        <span>= 0.0</span>
+        <span>}</span>
+        <span></span>
+        <span>//?</span>
+        <span>class</span>
+        <span class='SYM_CLASS'>ClassTuple</span>
+        <span>(</span>
+        <span class='SYM_CLASS'>Integer</span>
+        <span>= 0,</span>
+        <span class='SYM_CLASS'>Integer</span>
+        <span>= 0)</span>
+        <span></span>
+        <span>//?</span>
+        <span class='SYM_MACRO'>#derive</span>
+        <span>(</span>
+        <span class='SYM_TRAIT'>PartialEq</span>
+        <span>)</span>
+        <span>class</span>
+        <span class='SYM_CLASS'>ClassBlock</span>
+        <span>{</span>
+        <span>    0:</span>
+        <span class='SYM_CLASS'>Integer</span>
+        <span>= 0,</span>
+        <span>    1:</span>
+        <span class='SYM_CLASS'>Integer</span>
+        <span>= 0,</span>
+        <span>}</span>
+        <span></span>
+        <span>tagged</span>
+        <span class='SYM_CLASS'>TaggedName</span>
+        <span>{</span>
+        <span>    </span>
+        <span class='SYM_VARIANT'>VariantName</span>
+        <span>()</span>
+        <span>}</span>
+        <span></span>
+        <span>bitset</span>
+        <span class='SYM_CLASS'>BitsetName</span>
+        <span>(</span>
+        <span class='KEYWORD'>u8</span>
+        <span>) {</span>
+        <span class='SYM_FIELD'>BIT_FIELD</span>
+        <span>= 0b0000_0001</span>
+        <span>}</span>
+        <span></span>
+        <span>def</span>
+        <span class='SYM_FUNCTION_FREE'>is_some</span>
+        <span>(</span>
+        <span class='SYM_ARG'>maybe</span>
+        <span class='SYM_CLASS'>Boolean</span>
+        <span>{</span>
+        <span>    </span>
+        <span class='SYM_ARG'>maybe</span>
+        <span>match {</span>
+        <span>        case Some(s): true</span>
+        <span>        case None: false</span>
+        <span>    }</span>
+        <span>}</span>
+    </code>
+    <style>
+.rainbow > span {
+    white-space: pre
+}
+.rainbow > .SYM_FUNCTION_FREE {
+    color: #f92672;
+}
+    </style>
+</div>

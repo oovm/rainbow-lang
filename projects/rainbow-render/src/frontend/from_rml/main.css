@@ -1,0 +1,7 @@
+.rainbow > span {
+    white-space: pre
+}
+
+.rainbow > .SYM_FUNCTION_FREE {
+    color: #f92672;
+}
