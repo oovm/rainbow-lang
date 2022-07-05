@@ -3,6 +3,8 @@ members = ["projects/*"]
 default-members = [
     "projects/rainbow-core",
     "projects/rainbow-pest",
+    "projects/rainbow-render",
+    "projects/syntect-rainbow",
 ]
 exclude = [
     "projects/.DS_Store",
