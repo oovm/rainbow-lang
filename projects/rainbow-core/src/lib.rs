@@ -1,8 +1,6 @@
-#[cfg(feature = "html")]
-pub use self::renderer::parse_rainbow_html;
 pub use self::{
     errors::{ErrorKind, RainbowError, Result},
-    renderer::{RainbowRenderer, RenderNode},
+    renderer::{RainbowRenderer, RenderFragment, RenderNode},
     schema::Schema,
     vm::RainbowVM,
 };

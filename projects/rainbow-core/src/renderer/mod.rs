@@ -1,12 +1,6 @@
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, HashSet};
 
 use crate::vm::RainbowVM;
-
-#[cfg(feature = "html")]
-mod from_html;
-
-#[cfg(feature = "html")]
-pub use self::from_html::parse_rainbow_html;
 
 mod methods;
 
@@ -17,10 +11,15 @@ pub struct RainbowRenderer<'vm> {
     tracing: HashSet<String>,
 }
 
+#[derive(Clone, PartialEq)]
+pub struct RenderFragment {
+    inner: Vec<RenderNode>,
+}
+
 /// RenderNode
 #[derive(Clone, PartialEq)]
 pub struct RenderNode {
     pub name: Vec<String>,
-    pub attributes: BTreeMap<String, Option<String>>,
+    pub attributes: BTreeMap<String, String>,
     pub text: String,
 }
