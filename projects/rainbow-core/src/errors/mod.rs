@@ -1,5 +1,6 @@
 #[cfg(feature = "html")]
 mod from_html;
+mod from_std;
 pub type Result<T> = std::result::Result<T, RainbowError>;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -11,6 +12,7 @@ pub struct RainbowError {
 pub enum ErrorKind {
     DuplicateDeclaration(String),
     SyntaxError(String),
+    RuntimeError(String),
 }
 
 impl RainbowError {
@@ -22,5 +24,11 @@ impl RainbowError {
         S: Into<String>,
     {
         Self { kind: ErrorKind::SyntaxError(msg.into()) }
+    }
+    pub fn runtime_error<S>(msg: S) -> Self
+    where
+        S: Into<String>,
+    {
+        Self { kind: ErrorKind::RuntimeError(msg.into()) }
     }
 }

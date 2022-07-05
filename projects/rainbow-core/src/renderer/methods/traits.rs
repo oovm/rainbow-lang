@@ -1,5 +1,3 @@
-use std::fmt::Formatter;
-
 use super::*;
 
 impl Debug for RenderNode {
@@ -21,7 +19,7 @@ impl Debug for Element {
         f.debug_struct("Element")
             .field("name", &self.name.join("."))
             .field("attributes", &self.attributes)
-            .field("children", &self.children)
+            .field("children", &self.text)
             .finish()
     }
 }

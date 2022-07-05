@@ -1,7 +1,8 @@
 pub use self::{
     errors::{ErrorKind, RainbowError, Result},
-    renderer::{Element, RenderNode},
+    renderer::{RainbowRenderer, RenderNode},
     schema::Schema,
+    vm::RainbowVM,
 };
 
 mod errors;

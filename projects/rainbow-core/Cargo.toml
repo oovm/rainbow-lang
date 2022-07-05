@@ -1,9 +1,9 @@
 [package]
 name = "rainbow-core"
 version = "0.1.0"
-authors = ["Aster <192607617@qq.com>"]
+authors = ["Aster <192608617@qq.com>"]
 description = "..."
-repository = "https://github.com/oovm/sub_projects"
+repository = "https://github.com/voml/rainbow-lang"
 documentation = "https://docs.rs/rainbow-core"
 readme = "Readme.md"
 license = "MPL-2.0"
@@ -11,7 +11,7 @@ edition = "2021"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
-rainbow-pest = {version = "0.1.0", path = "../rainbow-pest"}
+rainbow-pest = {version = "0.1.2", path = "../rainbow-pest"}
 html_parser = {version = "0.6.3", optional = true}
 
 

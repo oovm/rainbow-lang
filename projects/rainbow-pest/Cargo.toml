@@ -1,12 +1,12 @@
 [package]
 name = "rainbow-pest"
-version = "0.1.0"
-authors = ["Aster <galaster@foxmail.com>"]
+version = "0.1.2"
+authors = ["Aster <192608617@qq.com>"]
 description = "Rainbow Language Pest Parser"
-license = "MPL-2.0"
-readme = "../../readme.md"
 repository = "https://github.com/voml/rainbow-lang"
-exclude = ["/tests/*"]
+documentation = "https://docs.rs/rainbow-core"
+readme = "../../readme.md"
+license = "MPL-2.0"
 edition = "2021"
 
 

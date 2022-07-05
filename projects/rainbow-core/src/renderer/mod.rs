@@ -1,25 +1,21 @@
 use std::collections::BTreeMap;
 
+use crate::vm::RainbowVM;
+
 #[cfg(feature = "html")]
 mod from_html;
-mod traits;
-use std::fmt::{Debug, Display};
+mod methods;
+
+pub struct RainbowRenderer<'vm> {
+    vm: &'vm RainbowVM,
+    theme: &'vm str,
+    language: &'vm str,
+}
 
 /// RenderNode
 #[derive(Clone, PartialEq)]
-pub enum RenderNode {
-    /// Root
-    Root(Vec<RenderNode>),
-    /// Text
-    Text(String),
-    /// Element
-    Element(Element),
-}
-
-/// Element
-#[derive(Clone, PartialEq)]
-pub struct Element {
+pub struct RenderNode {
     pub name: Vec<String>,
     pub attributes: BTreeMap<String, Option<String>>,
-    pub children: Vec<RenderNode>,
+    pub text: String,
 }

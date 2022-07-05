@@ -38,7 +38,7 @@ impl TryFrom<html_parser::Element> for Element {
         Ok(Element {
             name: element.name.split(".").map(|s| s.to_string()).collect(),
             attributes: Default::default(),
-            children: vec![],
+            text: vec![],
         })
     }
 }
