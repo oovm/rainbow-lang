@@ -30,11 +30,22 @@ impl RenderFragment {
     pub fn insert(&mut self, node: RenderNode) {
         self.inner.push(node);
     }
+    /// insert multiline texts
+    pub fn insert_lines<S>(&mut self, s: S)
+    where
+        S: Into<String>,
+    {
+        for line in s.into().lines() {
+            if !line.is_empty() {
+                self.inner.push(RenderNode::text(line));
+            }
+        }
+    }
     pub fn insert_text<S>(&mut self, s: S)
     where
         S: Into<String>,
     {
-        self.inner.push(RenderNode::text(s.into()));
+        self.inner.push(RenderNode { name: vec![], attributes: Default::default(), text: s.into() });
     }
 }
 
@@ -48,7 +59,7 @@ impl RenderNode {
         S: Into<String>,
     {
         let text = s.into();
-        assert_eq!(text.lines().count(), 1);
+        assert_eq!(text.lines().count(), 1, "{:?}", text);
         Self { name: vec![], attributes: Default::default(), text }
     }
 }

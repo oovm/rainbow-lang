@@ -6,6 +6,6 @@ pub use self::{
 };
 
 mod errors;
-mod renderer;
+pub mod renderer;
 mod schema;
 mod vm;

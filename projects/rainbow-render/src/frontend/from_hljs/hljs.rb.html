@@ -1,0 +1,19 @@
+<rust.builtin xmlns="rust">assert_eq!</rust.builtin>(<rust.string>"a &gt; b &amp;&amp; a &lt; c"</rust.string>, html_escape::<rust.method>encode_text</rust.method>(<rust.string>"a > b && a < c"</rust.string>));
+
+<rust.keyword>let</rust.keyword> <rust.keyword>mut </rust.keyword><rust.variable>html</rust.variable> = String::<rust.method>from</rust.method>(<rust.string>"<input value="</rust.string>);
+<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"Hello&#x20;world&#x21;"</rust.string>, html_escape::<rust.method>encode_unquoted_attribute_to_string</rust.method>(<rust.string>"Hello world!"</rust.string>, &<rust.keyword>mut</rust.keyword> html));
+html.<rust.method>push_str</rust.method>(<rust.string>" placeholder=\""</rust.string>);
+<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"The default value is &quot;Hello world!&quot;."</rust.string>, html_escape::<rust.method>encode_double_quoted_attribute_to_string</rust.method>(<rust.string>"The default value is \"Hello world!\"."</rust.string>, &<rust.keyword>mut</rust.keyword> html));
+html.<rust.method>push_str</rust.method>(<rust.string>"\"/><script>alert('"</rust.string>);
+<rust.builtin>assert_eq!</rust.builtin>(<rust.string>r"<script>\'s end tag is <\/script>"</rust.string>, html_escape::<rust.method>encode_script_single_quoted_text_to_string</rust.method>(<rust.string>"<script>'s end tag is </script>"</rust.string>, &<rust.keyword>mut</rust.keyword> html));
+html.<rust.method>push_str</rust.method>(<rust.string>"');</script>"</rust.string>);
+
+<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"<input value=Hello&#x20;world&#x21; placeholder=\"The default value is &quot;Hello world!&quot;.\"/><script>alert(\'<script>\\\'s end tag is <\\/script>\');</script>"</rust.string>, html);
+
+<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"Hello world!"</rust.string>, html_escape::<rust.method>decode_html_entities</rust.method>(<rust.string>"Hello&#x20;world&#x21;"</rust.string>));
+
+<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"alert('<script></script>);'"</rust.string>, html_escape::<rust.method>decode_script</rust.method>(<rust.string>r"alert('<script><\/script>);'"</rust.string>));
+
+<toml.section>[dependencies.html-escape]</toml.section>
+<toml.attr>version</toml.attr> = <toml.string>"*"</toml.string>
+<toml.attr>default-features</toml.attr> = <toml.literal>false</toml.literal>

@@ -1,7 +1,7 @@
-.rainbow > span {
+[theme='one-dark-night'] .rainbow > span {
     white-space: pre
 }
 
-.rainbow > .SYM_FUNCTION_FREE {
+[theme='one-dark-night'] .rainbow > .SYM_FUNCTION_FREE {
     color: #f92672;
 }
