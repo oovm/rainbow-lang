@@ -2,16 +2,10 @@ use std::{collections::BTreeMap, str::FromStr};
 
 use rainbow_pest::{
     ast::{ASTProgram, ASTStatement, MetaStatement, RangedObject, RangedValue, SchemaStatement},
-    Error, ParserConfig, Rule,
+    ParserConfig,
 };
 
 use crate::{schema::Value, RainbowError, Result, Schema};
-
-impl From<Error<Rule>> for RainbowError {
-    fn from(e: Error<Rule>) -> Self {
-        todo!("{}", e)
-    }
-}
 
 impl FromStr for Schema {
     type Err = RainbowError;
@@ -31,10 +25,6 @@ impl TryFrom<ASTProgram> for Schema {
         let mut ctx = SchemaContext::default();
         for i in program.statements {
             match i {
-                ASTStatement::Import(node) => {
-                    println!("{:#?}", node);
-                    todo!()
-                }
                 ASTStatement::Schema(node) => {
                     out.eval_schema(node, &mut ctx)?;
                 }
@@ -69,7 +59,6 @@ impl Schema {
         else {
             return Err(RainbowError::duplicate_declaration("schema"));
         }
-        self.schema = ast.schema;
         if let Some(v) = ast.object.get_string("theme") {
             self.theme = v
         }

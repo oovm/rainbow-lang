@@ -10,7 +10,6 @@ statement = _{
 }
 EmptyLine  = @{WHITESPACE* ~ NEWLINE}
 /*====================================================================================================================*/
-import_statement =  {"import" ~ String}
 schema_statement =  {"schema" ~ SYMBOL ~ object}
 meta_statement =  {SYMBOL ~ object}
 language_statement =  {"language" ~ SYMBOL ~ language_inherit? ~ object}

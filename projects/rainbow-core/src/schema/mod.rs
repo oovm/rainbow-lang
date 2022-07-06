@@ -10,9 +10,9 @@ mod value;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Schema {
-    pub schema: String,
     pub theme: String,
     pub variant: String,
+    pub default: BTreeMap<String, Value>,
     pub custom: BTreeMap<String, Value>,
     pub language: BTreeMap<String, Value>,
 }

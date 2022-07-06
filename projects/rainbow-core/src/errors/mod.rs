@@ -1,5 +1,6 @@
 #[cfg(feature = "html")]
 mod from_html;
+mod from_pest;
 mod from_std;
 pub type Result<T> = std::result::Result<T, RainbowError>;
 

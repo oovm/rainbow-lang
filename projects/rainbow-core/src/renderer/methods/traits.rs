@@ -31,19 +31,16 @@ impl Display for RenderNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self.name.is_empty() {
             true => write!(f, "{}", self.text),
-            false => match self.attributes.is_empty() {
-                true => write!(f, "<{name}>{text}</{name}>", name = self.name.join("."), text = self.text),
-                false => {
-                    let attrs = self.attributes.iter().map(|(k, v)| format!(" {}=\"{}\"", k, v)).collect::<String>();
-                    write!(
-                        f,
-                        "<{name}{attributes}>{text}</{name}>",
-                        name = self.name.join("."),
-                        text = html_escape(&self.text),
-                        attributes = attrs
-                    )
-                }
-            },
+            false => {
+                let attrs = self.attributes.iter().map(|(k, v)| format!(" {}=\"{}\"", k, v)).collect::<String>();
+                write!(
+                    f,
+                    "<{name}{attributes}>{text}</{name}>",
+                    name = self.name.join("."),
+                    text = html_escape(&self.text),
+                    attributes = attrs
+                )
+            }
         }
     }
 }
@@ -55,5 +52,5 @@ impl Default for RenderFragment {
 }
 
 fn html_escape(s: &str) -> String {
-    s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    s.replace("<", "&lt;").replace(">", "&gt;")
 }

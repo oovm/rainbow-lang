@@ -12,14 +12,10 @@ pub struct ASTProgram {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ASTStatement {
-    Import(ImportStatement),
     Schema(SchemaStatement),
     Meta(MetaStatement),
     Language(LanguageStatement),
 }
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ImportStatement {}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SchemaStatement {

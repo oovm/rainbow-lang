@@ -3,9 +3,9 @@ use super::*;
 impl Default for Schema {
     fn default() -> Self {
         Self {
-            schema: "".to_string(),
-            theme: "".to_string(),
-            variant: "".to_string(),
+            theme: "anonymous".to_string(),
+            variant: "light".to_string(),
+            default: Default::default(),
             custom: Default::default(),
             language: Default::default(),
         }

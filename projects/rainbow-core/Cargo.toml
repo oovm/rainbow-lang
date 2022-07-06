@@ -12,7 +12,6 @@ edition = "2021"
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 rainbow-pest = { version = "0.1.2", path = "../rainbow-pest" }
-html-escape = "0.2.11"
 
 [dev-dependencies]
 

@@ -30,7 +30,6 @@ impl Debug for OwnedValue {
 impl From<Schema> for Value {
     fn from(schema: Schema) -> Self {
         let mut out = BTreeMap::new();
-        out.insert("schema".to_string(), Value::string(schema.schema));
         out.insert("theme".to_string(), Value::string(schema.theme));
         out.insert("variant".to_string(), Value::string(schema.variant));
         return Value::object(out);
