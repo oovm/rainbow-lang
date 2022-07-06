@@ -14,9 +14,9 @@ impl Default for ParserConfig {
 }
 
 impl ParserConfig {
-    pub fn get_position(&self, s: &Pair<Rule>) -> Range<u32> {
-        let us = s.as_span().start_pos();
-        let es = s.as_span().end_pos();
-        Range { start: us.pos() as u32, end: es.pos() as u32 }
+    pub fn get_position(&self, s: &Pair<Rule>) -> Range<(u32, u32)> {
+        let us = s.as_span().start_pos().line_col();
+        let es = s.as_span().end_pos().line_col();
+        Range { start: (us.0 as u32, us.1 as u32), end: (es.0 as u32, es.1 as u32) }
     }
 }

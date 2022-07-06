@@ -3,19 +3,17 @@ program = _{
 }
 statement = _{
     SEPARATOR
-  | EmptyLine{1,}
   | schema_statement
   | language_statement
   | meta_statement
 }
-EmptyLine  = @{WHITESPACE* ~ NEWLINE}
 /*====================================================================================================================*/
-schema_statement =  {"schema" ~ SYMBOL ~ object}
+schema_statement =  {"schema" ~ SYMBOL ~ inherit? ~ object}
 meta_statement =  {SYMBOL ~ object}
-language_statement =  {"language" ~ SYMBOL ~ language_inherit? ~ object}
+language_statement =  {"language" ~ SYMBOL ~ inherit? ~ object}
 /*====================================================================================================================*/
 ///Red
-language_inherit = {":" ~ SYMBOL}
+inherit = {":" ~ namespace}
 object_inherit = {namespace? ~ object}
 /*====================================================================================================================*/
 object =  {"{" ~ (SEPARATOR | pair)* ~ "}"}
@@ -24,22 +22,18 @@ list   =  {(!(SYMBOL ~ Set) ~ value)+}
 Set    = _{"="|":"}
 /*====================================================================================================================*/
 value   = !{String|Special|Color|Number|namespace}
+///#C678DD
 Special = @{"true"|"false"|"null"}
-/// Yellow
+///#E5C07B
 Color   = @{"#" ~ ASCII_HEX_DIGIT+}
 /*====================================================================================================================*/
-//!#D19A66: SignedNumber
-Number       = ${SignedNumber ~ SYMBOL?}
-SignedNumber = ${Sign? ~ (Decimal|DecimalBad|Integer)}
+///#D19A66
+Number       = ${Sign? ~ (Decimal|Integer) ~ SYMBOL?}
 Decimal      = ${Integer ~ "." ~ ("_"? ~ ASCII_DIGIT)*}
-DecimalBad   = ${Integer ~ "."|"." ~ ("_"? ~ ASCII_DIGIT)*}
-//Integer    = @{"0"|ASCII_NONZERO_DIGIT ~ ("_"? ~ ASCII_DIGIT)*}
 Integer      = @{ASCII_DIGIT ~ ("_"? ~ ASCII_DIGIT)*}
 Sign         = @{"+"|"-"}
 /*====================================================================================================================*/
-//!#3C963C: String|InlineString|InlineString2|RestLineText
-//!#98C379: StringQuotation|StringAccent
-//!#D19A66: StringApostrophe
+///#98C379
 String    = ${"\"" ~ Character* ~ "\""}
 Character = @{
     "\\u" ~ ASCII_HEX_DIGIT{4}
@@ -52,8 +46,6 @@ Character = @{
 namespace =  {SYMBOL ~ ("." ~ SYMBOL)*}
 SYMBOL    = @{XID_START ~ (XID_CONTINUE|"_"|"-")*}
 /*====================================================================================================================*/
-// NEWLINE = @{"\r" ~ "\n"|"\r"|"\n"}
-
 ///Gray
 COMMENT          = _{"//" ~ (!NEWLINE ~ ANY)*}
 WHITESPACE       = _{NEWLINE|SPACE_SEPARATOR|"\t"}

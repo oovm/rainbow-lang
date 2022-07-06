@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use hex_color::HexColor;
 use pest::error::Error;
 use pest::error::ErrorVariant::CustomError;
@@ -43,16 +45,18 @@ impl ParserConfig {
     }
     fn parse_schema(&self, pairs: Pair<Rule>) -> Result<SchemaStatement> {
         // let r = self.get_position(&pairs);
-        let mut symbol = String::new();
+        let mut schema = String::new();
         let mut object = RangedObject::new();
+        let mut inherit = vec![];
         for pair in pairs.into_inner() {
             match pair.as_rule() {
-                Rule::SYMBOL => symbol = pair.as_str().to_string(),
+                Rule::SYMBOL => schema = pair.as_str().to_string(),
                 Rule::object => object = self.parse_object(pair)?,
+                Rule::inherit => inherit = self.parse_namespace_raw(pair)?,
                 _ => debug_cases!(pair),
             };
         }
-        Ok(SchemaStatement { schema: symbol, object })
+        Ok(SchemaStatement { schema, inherit, object })
     }
     fn parse_meta(&self, pairs: Pair<Rule>) -> Result<MetaStatement> {
         let mut pairs = pairs.into_inner();
@@ -61,18 +65,19 @@ impl ParserConfig {
         Ok(MetaStatement { meta, object })
     }
     fn parse_language(&self, pairs: Pair<Rule>) -> Result<LanguageStatement> {
-        // let r = self.get_position(&pairs);
+        let range = self.get_position(&pairs);
         let mut language = String::new();
-        let mut object = RangedObject::new();
+        let mut attributes = RangedObject::new();
+        let mut inherit = vec![];
         for pair in pairs.into_inner() {
             match pair.as_rule() {
                 Rule::SYMBOL => language = pair.as_str().to_string(),
-                Rule::object => object = self.parse_object(pair)?,
-                Rule::language_inherit => continue,
+                Rule::object => attributes = self.parse_object(pair)?,
+                Rule::inherit => inherit = self.parse_namespace_raw(pair)?,
                 _ => debug_cases!(pair),
             };
         }
-        Ok(LanguageStatement { language, inherit: vec![], attributes: object })
+        Ok(LanguageStatement { language, inherit, attributes, range })
     }
 }
 
@@ -89,10 +94,7 @@ impl ParserConfig {
         let mut pairs = pairs.into_inner().rev();
         let mut object = self.parse_object(pairs.next().unwrap())?;
         if let Some(s) = pairs.next() {
-            match self.parse_namespace(s)? {
-                RangedValue::Namespace(s) => object.inherit = s,
-                _ => {}
-            }
+            object.inherit = self.parse_namespace_raw(s)?
         }
         Ok(RangedValue::Object(object))
     }
@@ -115,11 +117,15 @@ impl ParserConfig {
         };
         Ok(KvPair::new(key.to_string(), value))
     }
-    fn parse_namespace(&self, pairs: Pair<Rule>) -> Result<RangedValue> {
+    fn parse_namespace_raw(&self, pairs: Pair<Rule>) -> Result<Vec<String>> {
         let mut out = vec![];
         for pair in pairs.into_inner() {
             out.push(pair.as_str().to_string())
         }
+        Ok(out)
+    }
+    fn parse_namespace(&self, pairs: Pair<Rule>) -> Result<RangedValue> {
+        let out = self.parse_namespace_raw(pairs)?;
         Ok(RangedValue::Namespace(out))
     }
     fn parse_value(&self, pairs: Pair<Rule>) -> Result<RangedValue> {
@@ -149,5 +155,14 @@ impl ParserConfig {
             Ok(o) => Ok(RangedValue::Color(o)),
             Err(e) => Err(Error::new_from_span(CustomError { message: e.to_string() }, pairs.as_span())),
         }
+    }
+}
+
+impl FromStr for ASTProgram {
+    type Err = Error<Rule>;
+
+    fn from_str(s: &str) -> Result<Self> {
+        let parser = ParserConfig::default();
+        parser.parse(s)
     }
 }

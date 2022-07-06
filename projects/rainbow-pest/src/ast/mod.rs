@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::ops::Range;
 
 use hex_color::HexColor;
 
@@ -20,6 +21,7 @@ pub enum ASTStatement {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SchemaStatement {
     pub schema: String,
+    pub inherit: Vec<String>,
     pub object: RangedObject,
 }
 
@@ -34,6 +36,7 @@ pub struct LanguageStatement {
     pub language: String,
     pub inherit: Vec<String>,
     pub attributes: RangedObject,
+    pub range: Range<(u32, u32)>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

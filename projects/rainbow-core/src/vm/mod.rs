@@ -3,7 +3,6 @@ use std::collections::BTreeMap;
 use crate::{schema::Value, Schema};
 
 mod builtin;
-mod methods;
 mod parser;
 mod reference;
 

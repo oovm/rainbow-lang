@@ -5,24 +5,26 @@ use rainbow_pest::{
     ParserConfig,
 };
 
-use crate::{schema::Value, RainbowError, Result, Schema};
+use crate::{schema::Value, RainbowError, RainbowVM, Result, Schema};
 
-impl FromStr for Schema {
-    type Err = RainbowError;
+struct EvalState {
+    first_schema: bool,
+}
 
-    fn from_str(s: &str) -> Result<Self> {
-        let parser = ParserConfig::default();
-        let ast = parser.parse(s)?;
-        Schema::try_from(ast)
+impl Default for EvalState {
+    fn default() -> Self {
+        Self { first_schema: true }
     }
 }
 
-impl TryFrom<ASTProgram> for Schema {
-    type Error = RainbowError;
-
-    fn try_from(program: ASTProgram) -> Result<Self> {
+impl RainbowVM {
+    pub fn define_schema(&mut self, text: &str) -> Result<()> {
+        let ast = ASTProgram::from_str(text)?;
+        self.eval_ast(ast)
+    }
+    fn eval_ast(&mut self, program: ASTProgram) -> Result<()> {
         let mut out = Schema::default();
-        let mut ctx = SchemaContext::default();
+        let mut ctx = EvalState::default();
         for i in program.statements {
             match i {
                 ASTStatement::Schema(node) => {
@@ -39,20 +41,7 @@ impl TryFrom<ASTProgram> for Schema {
         }
         Ok(out)
     }
-}
-
-impl Default for SchemaContext {
-    fn default() -> Self {
-        Self { first_schema: true }
-    }
-}
-
-struct SchemaContext {
-    first_schema: bool,
-}
-
-impl Schema {
-    fn eval_schema(&mut self, ast: SchemaStatement, ctx: &mut SchemaContext) -> Result<()> {
+    fn eval_schema(&mut self, ast: SchemaStatement, ctx: &mut EvalState) -> Result<()> {
         if ctx.first_schema {
             ctx.first_schema = false
         }
@@ -67,14 +56,11 @@ impl Schema {
         }
         Ok(())
     }
-    fn eval_meta(&mut self, ast: MetaStatement, ctx: &mut SchemaContext) -> Result<()> {
+    fn eval_meta(&mut self, ast: MetaStatement, ctx: &mut EvalState) -> Result<()> {
         self.custom.insert(ast.meta, Value::eval_object(ast.object, ctx)?);
         Ok(())
     }
-}
-
-impl Value {
-    fn eval_object(o: RangedObject, ctx: &mut SchemaContext) -> Result<Self> {
+    fn eval_object(o: RangedObject, ctx: &mut EvalState) -> Result<Self> {
         let mut out = BTreeMap::new();
         for (k, ranged) in o.inner {
             let v = match ranged {
