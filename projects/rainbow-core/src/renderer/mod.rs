@@ -25,3 +25,7 @@ pub struct RenderNode {
     pub attributes: BTreeMap<String, String>,
     pub text: String,
 }
+
+pub fn html_escape(s: &str) -> String {
+    s.replace("<", "&lt;").replace(">", "&gt;")
+}

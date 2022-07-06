@@ -1,7 +1,6 @@
 use scraper::{node::Element, ElementRef, Html, Selector};
 use selectors::attr::CaseSensitivity::AsciiCaseInsensitive;
 
-use crate::backend::RenderHtmlCodeSpan;
 use rainbow_core::{RainbowRenderer, RainbowVM, RenderFragment, RenderNode, Result};
 
 #[test]
@@ -11,6 +10,7 @@ fn test_hljs() {
     let mut text = String::new();
     for node in out {
         node.render_html(&mut RainbowRenderer::new(&RainbowVM::builtin(), "default", "rust"), &mut text).unwrap();
+        text.push('\n')
     }
     println!("{}", text);
 }

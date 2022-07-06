@@ -1,3 +1,4 @@
+use crate::renderer::html_escape;
 use std::fmt::Display;
 
 use super::*;
@@ -49,8 +50,4 @@ impl Default for RenderFragment {
     fn default() -> Self {
         Self { inner: vec![] }
     }
-}
-
-fn html_escape(s: &str) -> String {
-    s.replace("<", "&lt;").replace(">", "&gt;")
 }

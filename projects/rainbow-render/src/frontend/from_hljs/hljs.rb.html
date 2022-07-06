@@ -1,19 +1,12 @@
-<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"a &gt; b &amp;&amp; a &lt; c"</rust.string>, html_escape::<rust.method>encode_text</rust.method>(<rust.string>"a &gt; b && a &lt; c"</rust.string>));
-
-<rust.keyword>let</rust.keyword> <rust.keyword>mut </rust.keyword><rust.variable>html</rust.variable> = String::<rust.method>from</rust.method>(<rust.string>"&lt;input value="</rust.string>);
-<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"Hello&#x20;world&#x21;"</rust.string>, html_escape::<rust.method>encode_unquoted_attribute_to_string</rust.method>(<rust.string>"Hello world!"</rust.string>, &<rust.keyword>mut</rust.keyword> html));
-html.<rust.method>push_str</rust.method>(<rust.string>" placeholder=\""</rust.string>);
-<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"The default value is &quot;Hello world!&quot;."</rust.string>, html_escape::<rust.method>encode_double_quoted_attribute_to_string</rust.method>(<rust.string>"The default value is \"Hello world!\"."</rust.string>, &<rust.keyword>mut</rust.keyword> html));
-html.<rust.method>push_str</rust.method>(<rust.string>"\"/&gt;&lt;script&gt;alert('"</rust.string>);
-<rust.builtin>assert_eq!</rust.builtin>(<rust.string>r"&lt;script&gt;\'s end tag is &lt;\/script&gt;"</rust.string>, html_escape::<rust.method>encode_script_single_quoted_text_to_string</rust.method>(<rust.string>"&lt;script&gt;'s end tag is &lt;/script&gt;"</rust.string>, &<rust.keyword>mut</rust.keyword> html));
-html.<rust.method>push_str</rust.method>(<rust.string>"');&lt;/script&gt;"</rust.string>);
-
-<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"&lt;input value=Hello&#x20;world&#x21; placeholder=\"The default value is &quot;Hello world!&quot;.\"/&gt;&lt;script&gt;alert(\'&lt;script&gt;\\\'s end tag is &lt;\\/script&gt;\');&lt;/script&gt;"</rust.string>, html);
-
-<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"Hello world!"</rust.string>, html_escape::<rust.method>decode_html_entities</rust.method>(<rust.string>"Hello&#x20;world&#x21;"</rust.string>));
-
-<rust.builtin>assert_eq!</rust.builtin>(<rust.string>"alert('&lt;script&gt;&lt;/script&gt;);'"</rust.string>, html_escape::<rust.method>decode_script</rust.method>(<rust.string>r"alert('&lt;script&gt;&lt;\/script&gt;);'"</rust.string>));
-
-<toml.section>[dependencies.html-escape]</toml.section>
-<toml.attr>version</toml.attr> = <toml.string>"*"</toml.string>
-<toml.attr>default-features</toml.attr> = <toml.literal>false</toml.literal>
+<pre><code class="rainbow">
+<br><span>assert_eq!</span>(<span>"a &gt; b &amp;&amp; a &lt; c"</span>, html_escape::<span>encode_text</span>(<span>"a &gt; b && a &lt; c"</span>));<br></code></pre>
+<pre><code class="rainbow">
+<span>let</span> <span>mut </span><span>html</span> = String::<span>from</span>(<span>"&lt;input value="</span>);<br><span>assert_eq!</span>(<span>"Hello&#x20;world&#x21;"</span>, html_escape::<span>encode_unquoted_attribute_to_string</span>(<span>"Hello world!"</span>, &<span>mut</span> html));<br>html.<span>push_str</span>(<span>" placeholder=\""</span>);<br><span>assert_eq!</span>(<span>"The default value is &quot;Hello world!&quot;."</span>, html_escape::<span>encode_double_quoted_attribute_to_string</span>(<span>"The default value is \"Hello world!\"."</span>, &<span>mut</span> html));<br>html.<span>push_str</span>(<span>"\"/&gt;&lt;script&gt;alert('"</span>);<br><span>assert_eq!</span>(<span>r"&lt;script&gt;\'s end tag is &lt;\/script&gt;"</span>, html_escape::<span>encode_script_single_quoted_text_to_string</span>(<span>"&lt;script&gt;'s end tag is &lt;/script&gt;"</span>, &<span>mut</span> html));<br>html.<span>push_str</span>(<span>"');&lt;/script&gt;"</span>);<br><br><span>assert_eq!</span>(<span>"&lt;input value=Hello&#x20;world&#x21; placeholder=\"The default value is &quot;Hello world!&quot;.\"/&gt;&lt;script&gt;alert(\'&lt;script&gt;\\\'s end tag is &lt;\\/script&gt;\');&lt;/script&gt;"</span>, html);<br></code></pre>
+<pre><code class="rainbow">
+<span>assert_eq!</span>(<span>"Hello world!"</span>, html_escape::<span>decode_html_entities</span>(<span>"Hello&#x20;world&#x21;"</span>));<br></code></pre>
+<pre><code class="rainbow">
+<span>assert_eq!</span>(<span>"alert('&lt;script&gt;&lt;/script&gt;);'"</span>, html_escape::<span>decode_script</span>(<span>r"alert('&lt;script&gt;&lt;\/script&gt;);'"</span>));<br></code></pre>
+<pre><code class="rainbow">
+<span>[dependencies.html-escape]</span><br><span>version</span> = <span>"*"</span><br><span>default-features</span> = <span>false</span><br></code></pre>
+<pre><code class="rainbow">
+cargo bench<br></code></pre>
