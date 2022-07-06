@@ -2,6 +2,7 @@ use std::collections::{BTreeMap, HashSet};
 
 use crate::vm::RainbowVM;
 
+mod iter;
 mod methods;
 
 pub struct RainbowRenderer<'vm> {
@@ -9,6 +10,7 @@ pub struct RainbowRenderer<'vm> {
     theme: &'vm str,
     language: &'vm str,
     tracing: HashSet<String>,
+    class_name: Option<String>,
 }
 
 #[derive(Clone, PartialEq)]

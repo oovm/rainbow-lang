@@ -1,2 +1,2 @@
-mod backend;
-mod frontend;
+pub mod backend;
+pub mod frontend;

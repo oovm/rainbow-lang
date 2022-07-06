@@ -4,14 +4,15 @@ use scraper::{
 };
 use selectors::attr::CaseSensitivity::AsciiCaseInsensitive;
 
-use rainbow_core::{RenderFragment, RenderNode, Result};
+use crate::backend::RenderHtmlCodeSpan;
+use rainbow_core::{RainbowRenderer, RainbowVM, RenderFragment, RenderNode, Result};
 
 #[test]
 
 fn test_hljs() {
     let out = find_highlight_js(include_str!("hljs.html")).unwrap();
     for node in out {
-        println!("{}", node);
+        node.render_html(&mut RainbowRenderer::new(&RainbowVM::builtin(), "default", "rust")).unwrap();
     }
 }
 

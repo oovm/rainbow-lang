@@ -10,16 +10,31 @@ mod traits;
 
 impl<'vm> RainbowRenderer<'vm> {
     pub fn new(vm: &'vm RainbowVM, theme: &'vm str, language: &'vm str) -> Self {
-        Self { vm, theme, language, tracing: Default::default() }
+        Self { vm, theme, language, tracing: Default::default(), buffer: String::new(), class_name: None }
+    }
+    pub fn get_class_name(&self) -> String {
+        match &self.class_name {
+            None => "rainbow".to_string(),
+            Some(s) => s.to_string(),
+        }
+    }
+    pub fn set_class_name<S>(&mut self, class_name: S)
+    where
+        S: Into<String>,
+    {
+        self.class_name = Some(class_name.into());
+    }
+    pub fn trace(&mut self, name: &[String]) {
+        self.tracing.insert(name.join("-"));
     }
     pub fn clear_tracing(&mut self) {
         self.tracing.clear();
     }
-    pub fn render_css(&self) -> String {
-        format!("{:#?}", self.tracing)
+    pub fn clear_buffer(&mut self) {
+        self.buffer.clear();
     }
-    pub fn trace(&mut self, name: &[String]) {
-        self.tracing.insert(name.join("-"));
+    pub fn get_buffer(&self) -> &str {
+        &self.buffer
     }
 }
 
