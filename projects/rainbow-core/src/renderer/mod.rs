@@ -6,9 +6,9 @@ mod iter;
 mod methods;
 
 pub struct RainbowRenderer<'vm> {
-    vm: &'vm RainbowVM,
-    theme: &'vm str,
-    language: &'vm str,
+    pub vm: &'vm RainbowVM,
+    pub theme: &'vm str,
+    pub language: &'vm str,
     tracing: HashSet<String>,
     class_name: Option<String>,
 }

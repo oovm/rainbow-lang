@@ -1,9 +1,10 @@
 use std::collections::BTreeMap;
 
-use crate::Schema;
+use crate::{schema::Value, Schema};
 
 mod methods;
 mod parser;
+mod reference;
 
 pub struct RainbowVM {
     schemas: BTreeMap<String, Schema>,

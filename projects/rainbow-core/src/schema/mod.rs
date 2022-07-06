@@ -5,6 +5,7 @@ use std::{
 
 use rainbow_pest::HexColor;
 
+mod language;
 mod methods;
 mod value;
 
@@ -14,7 +15,12 @@ pub struct Schema {
     pub variant: String,
     pub default: BTreeMap<String, Value>,
     pub custom: BTreeMap<String, Value>,
-    pub language: BTreeMap<String, Value>,
+    pub language: BTreeMap<String, Language>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Language {
+    pub tokens: BTreeMap<String, Value>,
 }
 
 #[derive(Clone, Eq, PartialEq)]

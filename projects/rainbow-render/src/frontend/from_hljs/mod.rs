@@ -1,7 +1,4 @@
-use scraper::{
-    node::{Element, Text},
-    ElementRef, Html, Selector,
-};
+use scraper::{node::Element, ElementRef, Html, Selector};
 use selectors::attr::CaseSensitivity::AsciiCaseInsensitive;
 
 use crate::backend::RenderHtmlCodeSpan;
@@ -11,9 +8,11 @@ use rainbow_core::{RainbowRenderer, RainbowVM, RenderFragment, RenderNode, Resul
 
 fn test_hljs() {
     let out = find_highlight_js(include_str!("hljs.html")).unwrap();
+    let mut text = String::new();
     for node in out {
-        node.render_html(&mut RainbowRenderer::new(&RainbowVM::builtin(), "default", "rust")).unwrap();
+        node.render_html(&mut RainbowRenderer::new(&RainbowVM::builtin(), "default", "rust"), &mut text).unwrap();
     }
+    println!("{}", text);
 }
 
 fn find_highlight_js(html: &str) -> Result<Vec<RenderFragment>> {

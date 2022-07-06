@@ -68,3 +68,26 @@ impl Value {
         Value::Reference(s)
     }
 }
+
+impl Value {
+    #[inline]
+    pub fn get(&self, key: &str) -> Option<&Value> {
+        match self {
+            Value::Owned(v) => v.get(key),
+            _ => None,
+        }
+    }
+    #[inline]
+    pub fn is_reference(&self) -> bool {
+        matches!(self, Value::Reference(_))
+    }
+}
+impl OwnedValue {
+    #[inline]
+    pub fn get(&self, key: &str) -> Option<&Value> {
+        match self {
+            OwnedValue::Object(v) => v.get(key),
+            _ => None,
+        }
+    }
+}

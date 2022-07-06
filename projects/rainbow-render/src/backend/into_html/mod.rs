@@ -1,4 +1,4 @@
-use std::fmt::Write;
+use std::{collections::BTreeMap, fmt::Write};
 
 use rainbow_core::{RainbowRenderer, RenderFragment, RenderNode, Result};
 
@@ -9,67 +9,61 @@ pub trait RenderHtmlCodeSpan {
 }
 
 impl RenderHtmlCodeSpan for RenderFragment {
-    fn render_html(&self, ctx: &mut RainbowRenderer, buffer: &mut impl Write) -> Result<String> {
-        ctx.clear_buffer();
-        write!(ctx, "<code class=\"{}\">\n", ctx.get_class_name())?;
+    fn render_html(&self, ctx: &mut RainbowRenderer, buffer: &mut impl Write) -> Result<()> {
+        write!(buffer, "<code class=\"{}\">\n", ctx.get_class_name())?;
         for node in self {
-            node.render_html(ctx)?;
+            node.render_html(ctx, buffer)?;
         }
-        write!(ctx, "</code>")?;
-        todo!("{}", ctx.get_buffer())
+        write!(buffer, "</code>")?;
+        Ok(())
     }
 
-    fn render_css(&self, ctx: &mut RainbowRenderer) -> Result<String> {
-        ctx.clear_buffer();
+    fn render_css(&self, ctx: &mut RainbowRenderer, buffer: &mut impl Write) -> Result<()> {
         todo!()
     }
 
-    fn render_scss(&self, ctx: &mut RainbowRenderer) -> Result<String> {
-        ctx.clear_buffer();
+    fn render_scss(&self, ctx: &mut RainbowRenderer, buffer: &mut impl Write) -> Result<()> {
         todo!()
     }
 }
 
 impl RenderHtmlCodeSpan for RenderNode {
-    fn render_html(&self, ctx: &mut RainbowRenderer) -> Result<String> {
-        match self.name.is_empty() {
-            true => return self.text.render_html(ctx),
-            false => {
-
-            }
+    fn render_html(&self, ctx: &mut RainbowRenderer, buffer: &mut impl Write) -> Result<()> {
+        if let true = self.name.is_empty() {
+            return render_text(&self.text, buffer);
         }
-
-        let attrs = self.attributes.iter().map(|(k, v)| format!(" {}=\"{}\"", k, v)).collect::<String>();
-        write!(
-            ctx,
-            "<{name}{attributes}>{text}</{name}>",
-            name = self.name.join("."),
-            text = html_escape(&self.text),
-            attributes = attrs
-        )
+        let mut object = BTreeMap::default();
+        let mut tag = "span";
+        if let Some(link) = self.attributes.get("link") {
+            tag = "a";
+            object.insert("href", link);
+        }
+        let value = ctx.vm.try_reference(&self.name);
+        println!("{:?}", value);
+        write!(buffer, "<{tag}>{text}</{tag}>", tag = tag, text = self.text)?;
         Ok(())
-
     }
 
-    fn render_css(&self, _: &mut RainbowRenderer) -> Result<String> {
-        unreachable!()
-    }
-
-    fn render_scss(&self, _: &mut RainbowRenderer) -> Result<String> {
-        unreachable!()
-    }
-}
-
-impl RenderHtmlCodeSpan for String {
-    fn render_html(&self, ctx: &mut RainbowRenderer) -> Result<String> {
+    fn render_css(&self, _: &mut RainbowRenderer, _: &mut impl Write) -> Result<()> {
         todo!()
     }
 
-    fn render_css(&self, _: &mut RainbowRenderer) -> Result<String> {
-        unreachable!()
+    fn render_scss(&self, _: &mut RainbowRenderer, _: &mut impl Write) -> Result<()> {
+        todo!()
     }
+}
 
-    fn render_scss(&self, _: &mut RainbowRenderer) -> Result<String> {
-        unreachable!()
+fn render_text(text: &str, buffer: &mut impl Write) -> Result<()> {
+    if text.is_empty() || text.eq("\n") {
+        return Ok(());
     }
+    write!(buffer, "<span>{text}</span>", text = text)?;
+    Ok(())
+}
+
+fn render_link(node: &RenderNode, buffer: &mut impl Write, link: &str) -> Result<()> {
+    for line in node.text.lines() {
+        write!(buffer, "<a href={}>{}</a>", link, line)?;
+    }
+    Ok(())
 }
