@@ -3,36 +3,34 @@ use selectors::attr::CaseSensitivity::AsciiCaseInsensitive;
 
 use rainbow_core::{RainbowRenderer, RainbowVM, RenderFragment, RenderNode, Result};
 
+use crate::backend::HtmlInlineRenderer;
+
 #[test]
 
 fn test_hljs() {
-    let out = find_highlight_js(include_str!("hljs.html")).unwrap();
-    let mut text = String::new();
+    let out = find_highlight_js(include_str!("hljs.html"), "OneDark", "rust").unwrap();
+    let vm = RainbowVM::builtin();
+    let mut renderer = HtmlInlineRenderer::new(&vm);
     for node in out {
-        node.render_html(&mut RainbowRenderer::new(&RainbowVM::builtin(), "default", "rust"), &mut text).unwrap();
-        text.push('\n')
+        println!("{}", node);
+        let out = renderer.render(&node).unwrap();
+        println!("{}", out);
     }
-    println!("{}", text);
 }
 
-fn find_highlight_js(html: &str) -> Result<Vec<RenderFragment>> {
+fn find_highlight_js(html: &str, theme: &str, language: &str) -> Result<Vec<RenderFragment>> {
     let fragment = Html::parse_fragment(html);
+    // safe unwrap
     let selector = Selector::parse("code.hljs").unwrap();
     let mut out = vec![];
     for element in fragment.select(&selector) {
-        out.push(refine_code(element)?)
+        out.push(refine_code(element, theme, language)?)
     }
     Ok(out)
 }
 
-fn refine_code(code: ElementRef) -> Result<RenderFragment> {
-    let language = code
-        .value()
-        .classes
-        .iter()
-        .filter(|s| s.starts_with("language"))
-        .map(|s| s.strip_prefix("language-").unwrap_or("").to_string())
-        .next();
+fn refine_code(code: ElementRef, theme: &str, language: &str) -> Result<RenderFragment> {
+    let language = convert_language(&code, language);
     let mut out = RenderFragment::default();
     for node in code.children() {
         if let Some(text) = node.value().as_text() {
@@ -47,17 +45,16 @@ fn refine_code(code: ElementRef) -> Result<RenderFragment> {
                     text.push_str(&text_node.to_string());
                 }
             }
-            refine_span(span, text, &mut out, language.clone())?;
+            refine_span(span, text, &mut out, theme.to_string(), language.to_string())?;
             continue;
         }
     }
     Ok(out)
 }
 
-fn refine_span(span: &Element, text: String, snap: &mut RenderFragment, lang: Option<String>) -> Result<()> {
+fn refine_span(span: &Element, text: String, snap: &mut RenderFragment, theme: String, language: String) -> Result<()> {
     let kind = convert_class_name(span).to_string();
-    let node =
-        RenderNode { name: lang.into_iter().chain(vec![kind].into_iter()).collect(), attributes: Default::default(), text };
+    let node = RenderNode { name: vec![theme, language, kind], attributes: Default::default(), text };
     snap.insert(node);
     Ok(())
 }
@@ -69,6 +66,20 @@ fn has_class(element: &Element, class: &[&str]) -> bool {
         }
     }
     return true;
+}
+
+fn convert_language(code: &ElementRef, default: &str) -> String {
+    code.value()
+        .classes
+        .iter()
+        .filter(|s| s.starts_with("language"))
+        .map(|s| match s.strip_prefix("language-") {
+            Some("js") => "JS".to_string(),
+            Some(s) => s[0..1].to_uppercase() + &s[1..],
+            None => default.to_string(),
+        })
+        .next()
+        .unwrap_or(default.to_string())
 }
 
 fn convert_class_name(span: &Element) -> String {

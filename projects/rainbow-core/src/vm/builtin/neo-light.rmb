@@ -1,0 +1,27 @@
+///
+///
+///
+schema NeoLight: NeoNight {
+    theme: "neo"
+    variant: "light"
+    type: light
+    custom: {
+        font: "Fira Code"
+        color: #ABB2BF
+        background: #282C34
+        padding: 1em
+    }
+}
+
+palette {
+    red: #E06C75
+    green: #98C379
+    yellow: #E5C07B
+    orange: #D19A66
+    blue: #61AFEF
+    purple: #C678DD
+    cyan: #56B6C2
+    white: #ABB2BF
+    black: #282C34
+}
+

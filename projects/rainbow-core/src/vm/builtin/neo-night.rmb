@@ -1,0 +1,93 @@
+///
+///
+///
+schema NeoNight: OneDark {
+    theme: "neo"
+    variant: "night"
+    type: dark
+    custom: {
+        font: "Fira Code"
+        color: #ABB2BF
+        background: #282C34
+        padding: 1em
+    }
+}
+
+palette {
+    red: #E06C75
+    green: #98C379
+    yellow: #E5C07B
+    orange: #D19A66
+    blue: #61AFEF
+    purple: #C678DD
+    cyan: #56B6C2
+    white: #ABB2BF
+    black: #282C34
+}
+
+global {
+    ///
+    keyword: palette.purple;
+    builtin: palette.cyan;
+    ///
+    type: palette.yellow;
+    ///
+    module: palette.white;
+    function: palette.blue;
+    variable: palette.red;
+    ///
+    literal: palette.orange;
+    number: literal;
+    string: palette.green;
+    ///
+    comment: #5c6370 italic;
+    bad: #E06C75;
+}
+
+language Java {
+    class: type;
+    interface: palette.green;
+    static-method: function;
+    static-field: palette.orange;
+    method: function; /// member-method
+    field: variable; /// member-field
+}
+
+language Js {
+    class: type;
+    interface: palette.green;
+    method: function;
+}
+
+language Json {
+    key: palette.red;
+}
+
+language Rust {
+    macro: palette.cyan;
+    trait: palette.green;
+    generic-type: palette.cyan;
+    structure: type;
+    enumerate: structure;
+    variant: palette.red;
+
+    escape: palette.cyan;
+}
+
+language Valkyrie: Rust {
+    bitflag: structure;
+
+    number-suffix: keyword;
+    number: literal;
+    integer: number;
+    decimal: number;
+    byte: number;
+
+    string-prefix: keyword;
+}
+
+language Scala {
+    trait: palette.green;
+}
+
+

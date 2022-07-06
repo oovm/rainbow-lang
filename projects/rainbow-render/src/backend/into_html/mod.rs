@@ -6,52 +6,48 @@ mod display;
 
 pub struct HtmlInlineRenderer<'vm> {
     vm: &'vm RainbowVM,
-    theme: &'vm str,
-    language: &'vm str,
     buffer: String,
-    class_name: Option<String>,
+    class_name: String,
 }
 
 impl<'vm> HtmlInlineRenderer<'vm> {
-    pub fn new(vm: &'vm RainbowVM, theme: &'vm str, language: &'vm str) -> Self {
-        Self { vm, theme, language, buffer: String::new(), class_name: None }
+    pub fn new(vm: &'vm RainbowVM) -> Self {
+        Self { vm, buffer: "".to_string(), class_name: "rainbow".to_string() }
     }
-
-    pub fn set_class_name(&mut self, class_name: &str) {
-        self.class_name = Some(class_name.to_string());
+    pub fn set_class_name<S>(&mut self, class_name: S)
+    where
+        S: ToString,
+    {
+        self.class_name = class_name.to_string();
     }
 }
 
 impl<'vm> HtmlInlineRenderer<'vm> {
-    pub fn render_html(&mut self, code: &RenderFragment) -> Result<String> {
+    pub fn render(&mut self, code: &RenderFragment) -> Result<String> {
         self.buffer.clear();
         self.render_fragment(code)?;
         Ok(std::mem::take(&mut self.buffer))
     }
     fn render_fragment(&mut self, code: &RenderFragment) -> Result<()> {
-        match &self.class_name {
-            None => write!(self, "<pre><code>")?,
-            Some(s) => write!(self, "<pre><code class=\"{}\">", s)?,
-        }
-        for node in self {
-            node.render_html(ctx, buffer)?;
+        write!(self.buffer, "<pre><code class=\"{}\">", self.class_name)?;
+        for node in code {
+            self.render_node(node)?;
         }
         write!(self, "</code></pre>")?;
         Ok(())
     }
-    fn render_node(&mut self, code: &RenderNode) -> Result<()> {
-        if let true = self.name.is_empty() {
-            return render_text(&self.text, buffer);
+    fn render_node(&mut self, node: &RenderNode) -> Result<()> {
+        if let true = node.name.is_empty() {
+            return self.render_text(&node.text);
         }
         let mut object = BTreeMap::default();
         let mut tag = "span";
-        if let Some(link) = self.attributes.get("link") {
+        if let Some(link) = node.attributes.get("link") {
             tag = "a";
             object.insert("href", link);
         }
-        let value = self.vm.try_reference(&self.name);
-        println!("{:?}", value);
-        write!(self, "<{tag}>{text}</{tag}>", tag = tag, text = html_escape(&self.text))?;
+        let value = self.vm.try_reference(&node.name);
+        write!(self, "<{tag}>{text}</{tag}>", tag = tag, text = html_escape(&node.text))?;
         Ok(())
     }
     fn render_text(&mut self, text: &str) -> Result<()> {

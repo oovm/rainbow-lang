@@ -1,0 +1,45 @@
+///
+///
+///
+schema OneDark {
+    theme: "atom-one"
+    variant: "dark"
+    type: dark
+    custom: {
+        font: "Fira Code"
+        color: #ABB2BF
+        background: #282C34
+        padding: 1em
+    }
+}
+
+palette {
+    red: #E06C75
+    green: #98C379
+    yellow: #E5C07B
+    orange: #D19A66
+    blue: #61AFEF
+    purple: #C678DD
+    cyan: #56B6C2
+    white: #ABB2BF
+    black: #282C34
+}
+
+global {
+    ///
+    keyword: palette.purple;
+    builtin: palette.cyan;
+    ///
+    type: palette.yellow;
+    ///
+    module: palette.white;
+    function: palette.blue;
+    variable: palette.red;
+    ///
+    literal: palette.orange;
+    number: literal;
+    string: palette.green;
+    ///
+    comment: #5c6370 italic;
+    bad: #E06C75;
+}
