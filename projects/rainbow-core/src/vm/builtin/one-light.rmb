@@ -27,19 +27,19 @@ palette {
 
 global {
     ///
-    keyword: palette.purple;
-    builtin: palette.cyan;
+    keyword: palette.purple
+    builtin: palette.cyan
     ///
-    type: palette.yellow;
+    type: palette.yellow
     ///
-    module: palette.white;
-    function: palette.blue;
-    variable: palette.red;
+    module: palette.white
+    function: palette.blue
+    variable: palette.red
     ///
-    literal: palette.orange;
-    number: literal;
-    string: palette.green;
+    literal: palette.orange
+    number: literal
+    string: palette.green
     ///
-    comment: #5c6370 italic;
-    bad: #E06C75;
+    comment: #5c6370 italic
+    bad: #E06C75
 }

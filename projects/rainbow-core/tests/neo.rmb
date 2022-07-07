@@ -21,7 +21,7 @@ default {
 global {
     class: #e5c07b;
     interface: {}
-    trait: class {
+    trait: class.Rust {
 
     };
 }

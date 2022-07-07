@@ -27,67 +27,67 @@ palette {
 
 global {
     ///
-    keyword: palette.purple;
-    builtin: palette.cyan;
+    keyword: palette.purple
+    builtin: palette.cyan
     ///
-    type: palette.yellow;
+    type: palette.yellow
     ///
-    module: palette.white;
-    function: palette.blue;
-    variable: palette.red;
+    module: palette.white
+    function: palette.blue
+    variable: palette.red
     ///
-    literal: palette.orange;
-    number: literal;
-    string: palette.green;
+    literal: palette.orange
+    number: literal
+    string: palette.green
     ///
-    comment: #5c6370 italic;
-    bad: #E06C75;
+    comment: #5c6370 italic
+    bad: #E06C75
 }
 
 language Java {
-    class: type;
-    interface: palette.green;
-    static-method: function;
-    static-field: palette.orange;
-    method: function; /// member-method
-    field: variable; /// member-field
+    class: type
+    interface: palette.green
+    static-method: function
+    static-field: palette.orange
+    method: function /// member-method
+    field: variable /// member-field
 }
 
 language Js {
-    class: type;
-    interface: palette.green;
-    method: function;
+    class: type
+    interface: palette.green
+    method: function
 }
 
 language Json {
-    key: palette.red;
+    key: palette.red
 }
 
 language Rust {
-    macro: palette.cyan;
-    trait: palette.green;
-    generic-type: palette.cyan;
-    structure: type;
-    enumerate: structure;
-    variant: palette.red;
+    macro: palette.cyan
+    trait: palette.green
+    generic-type: palette.cyan
+    structure: type
+    enumerate: structure
+    variant: palette.red
 
-    escape: palette.cyan;
+    escape: palette.cyan
 }
 
 language Valkyrie: Rust {
-    bitflag: structure;
+    bitflag: structure
 
-    number-suffix: keyword;
-    number: literal;
-    integer: number;
-    decimal: number;
-    byte: number;
+    number-suffix: keyword
+    number: literal
+    integer: number
+    decimal: number
+    byte: number
 
-    string-prefix: keyword;
+    string-prefix: keyword
 }
 
 language Scala {
-    trait: palette.green;
+    trait: palette.green
 }
 
 
