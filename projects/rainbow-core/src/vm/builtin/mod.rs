@@ -13,14 +13,8 @@ impl Default for RainbowVM {
     }
 }
 
-impl Default for EvalState {
-    fn default() -> Self {
-        todo!()
-    }
-}
-
 impl RainbowVM {
-    pub fn builtin(&self) -> Self {
+    pub fn builtin() -> Self {
         let mut vm = RainbowVM::default();
         vm.define_schema(include_str!("one-dark.rmb")).unwrap();
         vm.define_schema(include_str!("one-light.rmb")).unwrap();

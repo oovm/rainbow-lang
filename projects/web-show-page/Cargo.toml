@@ -1,0 +1,16 @@
+[package]
+name = "web-show-page"
+publish = false
+version = "1.0.0"
+authors = ["Aster <galaster@foxmail.com>"]
+description = "Arc Readable Configuration"
+license = "MPL-2.0"
+readme = "../../Readme.md"
+repository = "https://github.com/doki-land/arc-rs"
+exclude = ["/tests/*"]
+edition = "2018"
+
+
+[dependencies]
+rainbow-macro = { version= "0.1.0", path = "../rainbow-macro" }
+

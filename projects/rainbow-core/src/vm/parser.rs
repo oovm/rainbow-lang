@@ -28,18 +28,19 @@ impl RainbowVM {
         for i in program.statements {
             match i {
                 ASTStatement::Schema(node) => {
-                    out.eval_schema(node, &mut ctx)?;
+                    println!("{:#?}", node);
+                    // out.eval_schema(node, &mut ctx)?;
                 }
                 ASTStatement::Meta(node) => {
-                    out.eval_meta(node, &mut ctx)?;
+                    println!("{:#?}", node);
+                    // out.eval_meta(node, &mut ctx)?;
                 }
                 ASTStatement::Language(node) => {
                     println!("{:#?}", node);
-                    todo!()
                 }
             }
         }
-        Ok(out)
+        todo!()
     }
     fn eval_schema(&mut self, ast: SchemaStatement, ctx: &mut EvalState) -> Result<()> {
         if ctx.first_schema {
@@ -48,17 +49,17 @@ impl RainbowVM {
         else {
             return Err(RainbowError::duplicate_declaration("schema"));
         }
-        if let Some(v) = ast.object.get_string("theme") {
-            self.theme = v
-        }
-        if let Some(v) = ast.object.get_string("variant") {
-            self.variant = v
-        }
-        Ok(())
+        todo!()
+        // if let Some(v) = ast.object.get_string("theme") {
+        //     self.theme = v
+        // }
+        // if let Some(v) = ast.object.get_string("variant") {
+        //     self.variant = v
+        // }
+        // Ok(())
     }
     fn eval_meta(&mut self, ast: MetaStatement, ctx: &mut EvalState) -> Result<()> {
-        self.custom.insert(ast.meta, Value::eval_object(ast.object, ctx)?);
-        Ok(())
+        todo!()
     }
     fn eval_object(o: RangedObject, ctx: &mut EvalState) -> Result<Self> {
         let mut out = BTreeMap::new();

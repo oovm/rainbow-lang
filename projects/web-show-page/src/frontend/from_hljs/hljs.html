@@ -1,0 +1,80 @@
+<div class="_docs_87huyj">
+    <article aria-label="Readme">
+        <div class="_wrapper_1y1g39">
+            <h1><a href="#html-escape" id="user-content-html-escape" rel="nofollow noopener noreferrer"></a>HTML Escape
+            </h1>
+            <p><a href="https://github.com/magiclen/html-escape/actions/workflows/ci.yml"
+                  rel="nofollow noopener noreferrer"><img
+                    src="https://github.com/magiclen/html-escape/actions/workflows/ci.yml/badge.svg" alt="CI"></a></p>
+            <p>This library is for encoding/escaping special characters in HTML and decoding/unescaping HTML entities as
+                well.</p>
+            <h2><a href="#usage" id="user-content-usage" rel="nofollow noopener noreferrer"></a>Usage</h2>
+            <h3><a href="#encoding" id="user-content-encoding" rel="nofollow noopener noreferrer"></a>Encoding</h3>
+            <p>This crate provides some <code>encode_*</code> functions to encode HTML text in different situations.</p>
+            <p>For example, to put a text between a start tag <code>&lt;foo&gt;</code> and an end tag
+                <code>&lt;/foo&gt;</code>, use the <code>encode_text</code> function to escape every <code>&amp;</code>,
+                <code>&lt;</code>, and <code>&gt;</code> in the text.</p>
+            <pre>
+<code class="language-rust hljs">
+<span class="hljs-built_in">assert_eq!</span>(<span
+class="hljs-string">"a &amp;gt; b &amp;amp;&amp;amp; a &amp;lt; c"</span>, html_escape::<span
+class="hljs-title function_ invoke__">encode_text</span>(<span class="hljs-string">"a &gt; b &amp;&amp; a &lt; c"</span>));
+</code>
+            </pre>
+            <p>The functions suffixed with <code>_to_writer</code>, <code>_to_vec</code> or <code>_to_string</code> are
+                useful to generate HTML.</p>
+            <pre><code class="language-rust hljs"><span class="hljs-keyword">let</span> <span
+                    class="hljs-keyword">mut </span><span class="hljs-variable">html</span> = String::<span
+                    class="hljs-title function_ invoke__">from</span>(<span
+                    class="hljs-string">"&lt;input value="</span>);
+<span class="hljs-built_in">assert_eq!</span>(<span class="hljs-string">"Hello&amp;#x20;world&amp;#x21;"</span>, html_escape::<span
+                        class="hljs-title function_ invoke__">encode_unquoted_attribute_to_string</span>(<span
+                        class="hljs-string">"Hello world!"</span>, &amp;<span class="hljs-keyword">mut</span> html));
+html.<span class="hljs-title function_ invoke__">push_str</span>(<span class="hljs-string">" placeholder=\""</span>);
+<span class="hljs-built_in">assert_eq!</span>(<span class="hljs-string">"The default value is &amp;quot;Hello world!&amp;quot;."</span>, html_escape::<span
+                        class="hljs-title function_ invoke__">encode_double_quoted_attribute_to_string</span>(<span
+                        class="hljs-string">"The default value is \"Hello world!\"."</span>, &amp;<span
+                        class="hljs-keyword">mut</span> html));
+html.<span class="hljs-title function_ invoke__">push_str</span>(<span class="hljs-string">"\"/&gt;&lt;script&gt;alert('"</span>);
+<span class="hljs-built_in">assert_eq!</span>(<span
+                        class="hljs-string">r"&lt;script&gt;\'s end tag is &lt;\/script&gt;"</span>, html_escape::<span
+                        class="hljs-title function_ invoke__">encode_script_single_quoted_text_to_string</span>(<span
+                        class="hljs-string">"&lt;script&gt;'s end tag is &lt;/script&gt;"</span>, &amp;<span
+                        class="hljs-keyword">mut</span> html));
+html.<span class="hljs-title function_ invoke__">push_str</span>(<span class="hljs-string">"');&lt;/script&gt;"</span>);
+
+<span class="hljs-built_in">assert_eq!</span>(<span class="hljs-string">"&lt;input value=Hello&amp;#x20;world&amp;#x21; placeholder=\"The default value is &amp;quot;Hello world!&amp;quot;.\"/&gt;&lt;script&gt;alert(\'&lt;script&gt;\\\'s end tag is &lt;\\/script&gt;\');&lt;/script&gt;"</span>, html);
+</code></pre>
+            <h3><a href="#decoding" id="user-content-decoding" rel="nofollow noopener noreferrer"></a>Decoding</h3>
+            <pre><code class="language-rust hljs"><span class="hljs-built_in">assert_eq!</span>(<span
+                    class="hljs-string">"Hello world!"</span>, html_escape::<span class="hljs-title function_ invoke__">decode_html_entities</span>(<span
+                    class="hljs-string">"Hello&amp;#x20;world&amp;#x21;"</span>));
+</code></pre>
+            <pre><code class="language-rust hljs"><span class="hljs-built_in">assert_eq!</span>(<span
+                    class="hljs-string">"alert('&lt;script&gt;&lt;/script&gt;);'"</span>, html_escape::<span
+                    class="hljs-title function_ invoke__">decode_script</span>(<span class="hljs-string">r"alert('&lt;script&gt;&lt;\/script&gt;);'"</span>));
+</code></pre>
+            <h2><a href="#no-std" id="user-content-no-std" rel="nofollow noopener noreferrer"></a>No Std</h2>
+            <p>Disable the default features to compile this crate without std.</p>
+            <pre><code class="language-toml hljs language-ini"><span
+                    class="hljs-section">[dependencies.html-escape]</span>
+<span class="hljs-attr">version</span> = <span class="hljs-string">"*"</span>
+<span class="hljs-attr">default-features</span> = <span class="hljs-literal">false</span>
+</code></pre>
+            <h2><a href="#benchmark" id="user-content-benchmark" rel="nofollow noopener noreferrer"></a>Benchmark</h2>
+            <pre><code class="language-bash hljs">cargo bench
+</code></pre>
+            <h2><a href="#cratesio" id="user-content-cratesio" rel="nofollow noopener noreferrer"></a>Crates.io</h2>
+            <p><a href="https://crates.io/crates/html-escape" rel="nofollow noopener noreferrer">https://crates.io/crates/html-escape</a>
+            </p>
+            <h2><a href="#documentation" id="user-content-documentation" rel="nofollow noopener noreferrer"></a>Documentation
+            </h2>
+            <p><a href="https://docs.rs/html-escape" rel="nofollow noopener noreferrer">https://docs.rs/html-escape</a>
+            </p>
+            <h2><a href="#license" id="user-content-license" rel="nofollow noopener noreferrer"></a>License</h2>
+            <p><a href="https://github.com/magiclen/html-escape/blob/HEAD/LICENSE" rel="nofollow noopener noreferrer">MIT</a>
+            </p>
+
+        </div>
+    </article>
+</div>

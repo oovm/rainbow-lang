@@ -1,7 +1,7 @@
 ///
 ///
 ///
-schema NeoNight: OneDark {
+schema NeoNight {
     theme: "neo"
     variant: "night"
     type: dark
@@ -15,74 +15,89 @@ schema NeoNight: OneDark {
 
 palette {
     red: #E06C75
-    green: #98C379
-    yellow: #E5C07B
     orange: #D19A66
+    yellow: #E5C07B
+    green: #98C379
     blue: #61AFEF
-    purple: #C678DD
     cyan: #56B6C2
+    purple: #C678Dd
     white: #ABB2BF
     black: #282C34
 }
 
 global {
-    ///
+    /// language built-in
     keyword: palette.purple
     builtin: palette.cyan
-    ///
-    type: palette.yellow
-    ///
+    annotation: palette.cyan
+    /// module name, package name
     module: palette.white
+    /// type, instantiable object
+    type: palette.yellow
+    generic: palette.cyan
+    class: type
+    structure: type
+    enumerate: type
+    variant: palette.red
+    /// type, non-instantiated object
+    interface: palette.green
+    trait: interface
+    /// function, callable procedure
     function: palette.blue
-    variable: palette.red
-    ///
-    literal: palette.orange
-    number: literal
+
+    method: function
+    static-method: method
+    member-method: italic method
+    /// variable, property
+    variable: palette.orange
+    mutable-variable: underline variable
+
+    field: palette.cyan
+    static-field: field
+    member-field: italic field
+    /// literal, invariant
+    constant: palette.orange
+    number: palette.orange
     string: palette.green
-    ///
-    comment: #5c6370 italic
-    bad: #E06C75
+    escaped: palette.cyan
+    /// non-ast
+    comment: #5C6370
+    bad: #FF1726
 }
+
 
 language Java {
-    class: type
-    interface: palette.green
-    static-method: function
-    static-field: palette.orange
-    method: function /// member-method
-    field: variable /// member-field
+    abstract-class: interface
 }
 
-language Js {
-    class: type
-    interface: palette.green
-    method: function
+language JS {
+
 }
 
-language Json {
+language JSX: JS {
+
+}
+
+language JSON {
     key: palette.red
 }
 
 language Rust {
-    macro: palette.cyan
-    trait: palette.green
-    generic-type: palette.cyan
-    structure: type
-    enumerate: structure
-    variant: palette.red
-
-    escape: palette.cyan
+    macro: annotation
 }
 
-language Valkyrie: Rust {
+language Valkyrie {
+    /// language meta
+    meta: annotation
+    macro: annotation
+    /// instantiable object
     bitflag: structure
-
+    /// number
     number-suffix: keyword
-    number: literal
     integer: number
     decimal: number
     byte: number
-
+    /// string
     string-prefix: keyword
 }
 

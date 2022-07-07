@@ -1,0 +1,27 @@
+[package]
+name = "rainbow-macro"
+version = "0.1.0"
+authors = ["Aster <galaster@foxmail.com>"]
+description = "Arc Readable Configuration"
+license = "MPL-2.0"
+readme = "../../Readme.md"
+repository = "https://github.com/doki-land/arc-rs"
+exclude = ["/tests/*"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+rainbow-core = { version = "0.1.0", path = "../rainbow-core" }
+
+[dependencies.rainbow-render]
+version = "0.1.0"
+path = "../rainbow-render"
+default-features = false
+features = ["html"]
+
+[features]
+default = []
+html = []
+lsp = []
