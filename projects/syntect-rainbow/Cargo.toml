@@ -10,7 +10,7 @@ exclude = ["/tests/*"]
 edition = "2018"
 
 [dependencies]
-url = "2.2.2"
+url = "2.3.1"
 
 [dev-dependencies]
 
