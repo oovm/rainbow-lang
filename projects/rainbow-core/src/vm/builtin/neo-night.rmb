@@ -1,6 +1,3 @@
-///
-///
-///
 schema NeoNight {
     theme: "neo"
     variant: "night"
@@ -50,7 +47,6 @@ global {
     member-method: italic method
     /// variable, property
     variable: palette.orange
-    mutable-variable: underline variable
 
     field: palette.cyan
     static-field: field
@@ -65,16 +61,25 @@ global {
     bad: #FF1726
 }
 
+language Markup {
+    bold: bold constant
+    italic: italic
+    underline: underline
+}
+
+language Markdown: Markup {
+
+}
 
 language Java {
     abstract-class: interface
 }
 
-language JS {
+language Javascript {
 
 }
 
-language JSX: JS {
+language JSX: Javascript {
 
 }
 
@@ -86,12 +91,37 @@ language Rust {
     macro: annotation
 }
 
+language Scala {
+    trait: palette.green
+}
+
 language Valkyrie {
     /// language meta
     meta: annotation
     macro: annotation
     /// instantiable object
     bitflag: structure
+    /// ```
+    /// let v = 0
+    /// let mut v = 0
+    /// ```
+    variable: palette.keyword
+    variable-mutable: underline variable
+    /// ```
+    /// def f(arg)
+    /// def f(mut arg)
+    /// ```
+    argument: palette.keyword
+    argument-mutable: underline variable
+    /// ```
+    /// def f(self)
+    /// def f(mut self)
+    /// ```
+    self: {
+        text: "self"
+        color: palette.purple
+    }
+    self-mutable: underline self
     /// number
     number-suffix: keyword
     integer: number
@@ -100,9 +130,3 @@ language Valkyrie {
     /// string
     string-prefix: keyword
 }
-
-language Scala {
-    trait: palette.green
-}
-
-
